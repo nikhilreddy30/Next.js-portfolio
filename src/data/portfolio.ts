@@ -1,6 +1,6 @@
 export const personalInfo = {
   name: "Yalaka Nikhil Reddy",
-  role: "Full-Stack Web Developer & Computer Science Student",
+  role: "Full-Stack Developer & Computer Science Student",
   tagline: "Computer Science Engineering student with hands-on experience in web application development. Proficient in Java, Python, and modern web technologies, with practical exposure to MERN and PHP–MySQL applications. Eager to apply problem-solving skills and learn industry-level software development practices.",
   focus: "Open to full-stack development, web application, and software engineering roles where I can apply my MERN stack expertise and contribute to meaningful projects.",
   email: "yalakanikhil30@gmail.com",
@@ -13,7 +13,6 @@ export const stats = [
   { value: 3, suffix: "+", label: "Major Projects" },
   { value: 4, suffix: "+", label: "Certifications" },
   { value: 8.5, suffix: "", label: "CGPA" },
-  { value: 10, suffix: "/10", label: "GPA (SSC)" },
 ];
 
 export const about = {
