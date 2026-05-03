@@ -2,9 +2,9 @@ import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
+import SkillsSection from "@/components/SkillsSection";
 import ExperienceSection from "@/components/ExperienceSection";
 import ProjectsSection from "@/components/ProjectsSection";
-import SkillsSection from "@/components/SkillsSection";
 import AITwinSection from "@/components/AITwinSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
@@ -20,9 +20,9 @@ export default function Home() {
       <main id="main-content" tabIndex={-1}>
         <HeroSection />
         <AboutSection />
+        <SkillsSection />
         <ExperienceSection />
         <ProjectsSection />
-        <SkillsSection />
         <AITwinSection />
         <ContactSection />
       </main>
