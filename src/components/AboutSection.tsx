@@ -45,7 +45,7 @@ const AboutSection = () => {
                     <div>
                       <p className="mb-1 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">About</p>
                       <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                        <span className="text-gradient">Nikunj</span>
+                        <span className="text-gradient">Nikhil</span>
                       </h2>
                     </div>
                   </div>
