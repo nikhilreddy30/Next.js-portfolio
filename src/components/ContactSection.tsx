@@ -27,13 +27,13 @@ const SOCIAL_LINKS = [
   {
     icon: Linkedin,
     label: "LinkedIn",
-    value: "linkedin.com/in/nikunj-khitha",
+    value: "linkedin.com/in/yalaka-nikhil-reddy",
     href: personalInfo.linkedin,
   },
   {
     icon: Github,
     label: "GitHub",
-    value: "github.com/Nikunj2003",
+    value: "github.com/YNikhil188",
     href: personalInfo.github,
   },
 ];
