@@ -305,7 +305,7 @@ const ExperienceSection = () => {
 
                 <div className="relative">
                   <div className="mb-6 inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-mono text-primary">
-                    Journey
+                    Background
                   </div>
                   <h2 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl">
                     My <br className="hidden lg:block" />
