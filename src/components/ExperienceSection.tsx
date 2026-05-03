@@ -308,8 +308,8 @@ const ExperienceSection = () => {
                     Journey
                   </div>
                   <h2 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl">
-                    Professional <br className="hidden lg:block" />
-                    <span className="text-gradient">Experience</span>
+                    My <br className="hidden lg:block" />
+                    <span className="text-gradient">Education</span>
                   </h2>
                   <p className="max-w-md leading-relaxed text-muted-foreground">
                     I’ve grown from building public-sector software into shipping backend systems, full-stack platform features, gateways, observability, and AI products where reliability, delivery speed, retrieval quality, and usability all have to work together.
