@@ -1,7 +1,7 @@
 export const personalInfo = {
   name: "Yalaka Nikhil Reddy",
   role: "Full-Stack Developer & Computer Science Student",
-  tagline: "Computer Science Engineering student with hands-on experience in web application development. Proficient in Java, Python, and modern web technologies, with practical exposure to MERN and PHP–MySQL applications. Eager to apply problem-solving skills and learn industry-level software development practices.",
+  tagline: "Computer Science Engineering student with hands-on experience in web application development. Proficient in Java, Python, and modern web technologies, with practical exposure to MERN and PHP–MySQL applications.",
   focus: "Open to full-stack development, web application, and software engineering roles where I can apply my MERN stack expertise and contribute to meaningful projects.",
   email: "yalakanikhil30@gmail.com",
   linkedin: "https://www.linkedin.com/in/yalaka-nikhil-reddy",
@@ -71,6 +71,42 @@ export const experiences: Experience[] = [
   },
 ];
 
+export interface Certification {
+  title: string;
+  issuer: string;
+  date: string;
+  credentialId?: string;
+  credentialUrl?: string;
+  description: string;
+}
+
+export const certifications: Certification[] = [
+  {
+    title: "Oracle Certified in Java Foundation",
+    issuer: "Oracle",
+    date: "2024",
+    description: "Demonstrates foundational knowledge of Java programming language, object-oriented concepts, and core Java features.",
+  },
+  {
+    title: "IBM Certified in SQL and Relational Databases 101",
+    issuer: "IBM",
+    date: "2024",
+    description: "Validates proficiency in SQL query writing, database design, and working with relational database management systems.",
+  },
+  {
+    title: "Oracle Cloud Database Services 2025 Certified Professional",
+    issuer: "Oracle",
+    date: "2025",
+    description: "Certifies expertise in Oracle Cloud infrastructure, database services, and cloud deployment practices.",
+  },
+  {
+    title: "Database Fundamentals",
+    issuer: "Microsoft",
+    date: "2024",
+    description: "Comprehensive understanding of database concepts, SQL operations, and data management principles.",
+  },
+];
+
 export interface Project {
   slug: string;
   title: string;
@@ -99,12 +135,12 @@ export const projects: Project[] = [
     timeline: "Aug 2025 - Sep 2025",
     complexity: "Role-based access control, authentication, CRUD operations, API integration, and performance optimization",
     images: [
-    "/images/projects/bugcrew/preview.png",
-    "/images/projects/bugcrew/login.png",
-    "/images/projects/bugcrew/Admin.png",
-    "/images/projects/bugcrew/Manager.png",
-    "/images/projects/bugcrew/Developer.png",
-    "/images/projects/bugcrew/Tester.png",
+      "/images/projects/bugcrew/preview.png",
+      "/images/projects/bugcrew/login.png",
+      "/images/projects/bugcrew/Admin.png",
+      "/images/projects/bugcrew/Manager.png",
+      "/images/projects/bugcrew/Developer.png",
+      "/images/projects/bugcrew/Tester.png",
     ],
     tech: ["MongoDB", "Express.js", "React", "Node.js", "JWT", "REST APIs"],
     github: "https://github.com/YNikhil188/bugcrew",
@@ -121,12 +157,12 @@ export const projects: Project[] = [
     timeline: "May 2025 - July 2025",
     complexity: "JWT authentication, file handling, data processing, interactive dashboards, and API integration",
     images: [
-    "/images/projects/xceltics/Preview.png",
-    "/images/projects/xceltics/login.png",
-    "/images/projects/xceltics/Dashboard.png",
-    "/images/projects/xceltics/Uploads.png",
-    "/images/projects/xceltics/Charts.png",
-    "/images/projects/xceltics/Insights.png",
+      "/images/projects/xceltics/Preview.png",
+      "/images/projects/xceltics/login.png",
+      "/images/projects/xceltics/Dashboard.png",
+      "/images/projects/xceltics/Uploads.png",
+      "/images/projects/xceltics/Charts.png",
+      "/images/projects/xceltics/Insights.png",
     ],
     tech: ["React", "Node.js", "Express.js", "MongoDB", "Chart.js", "JWT"],
     github: "https://github.com/YNikhil188/xceltics",
@@ -143,7 +179,7 @@ export const projects: Project[] = [
     timeline: "Nov 2024 - Jan 2025",
     complexity: "Form validation, session handling, CRUD operations, database design, and responsive UI",
     images: [
-    "/images/projects/carrento/Carrento.png",
+      "/images/projects/carrento/Carrento.png",
     ],
     tech: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL"],
     github: "https://github.com/YNikhil188/carrento",
