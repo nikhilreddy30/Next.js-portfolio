@@ -7,9 +7,9 @@ import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const NAV_LINKS = [
   { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
   { label: "AI Twin", href: "#ai-twin" },
   { label: "Contact", href: "#contact" },
 ];
@@ -70,7 +70,7 @@ const Footer = () => (
           {/* Mobile: centered social icons above copyright | Desktop: copyright-left icons-right */}
           <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
             <p className="text-xs text-muted-foreground/60 text-center sm:text-left font-medium">
-              © {new Date().getFullYear()} Yalaka Nikhil Reddy · Built with Next.js &amp; Tailwind
+              © {new Date().getFullYear()}  Yalaka Nikhil Reddy · Built with Next.js &amp; Tailwind
             </p>
 
             <div className="flex items-center gap-3">
