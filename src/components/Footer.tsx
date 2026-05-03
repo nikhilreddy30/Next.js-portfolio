@@ -34,7 +34,7 @@ const Footer = () => (
                 <Image src={logo} alt="" aria-hidden="true" className="w-8 h-8 opacity-80 group-hover:opacity-100 relative z-10 transition-opacity pointer-events-none" draggable={false} />
               </div>
               <span className="text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors tracking-tight">
-                Nikunj Khitha
+                Yalaka Nikhil Reddy
               </span>
             </a>
 
