@@ -143,7 +143,7 @@ export const projects: Project[] = [
     timeline: "Nov 2024 - Jan 2025",
     complexity: "Form validation, session handling, CRUD operations, database design, and responsive UI",
     images: [
-    "/images/projects/carrento/carrento.png",
+    "/images/projects/carrento/Carrento.png",
     ],
     tech: ["HTML5", "CSS3", "JavaScript", "PHP", "MySQL"],
     github: "https://github.com/YNikhil188/carrento",
