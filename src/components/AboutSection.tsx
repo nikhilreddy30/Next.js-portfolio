@@ -75,29 +75,9 @@ const AboutSection = () => {
               className="prose prose-invert prose-lg max-w-none text-muted-foreground leading-relaxed"
             >
               <p className="text-xl sm:text-2xl font-medium text-foreground tracking-tight leading-snug mb-6" style={{ textWrap: "pretty" }}>
-                I build backend-heavy AI products and platform systems where APIs, reliability, security, observability, retrieval quality, and user experience all matter at the same time.
-              </p>
-              <p style={{ textWrap: "pretty" }}>
-                {about.summary}
+                {about.summary}              
               </p>
             </motion.div>
-
-            <SpotlightCard delay={0.25} className="overflow-hidden">
-              <div className="p-6 sm:p-7">
-                <div className="mb-4 flex items-center gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary shadow-[0_0_24px_rgba(41,214,185,0.12)]">
-                    <Award className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.25em] text-primary/80">Recognition</p>
-                    <h3 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">AI Ninja Award at ArmorCode</h3>
-                  </div>
-                </div>
-                <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                  First person to receive ArmorCode&apos;s AI Ninja Award, and the youngest person to receive an award at the company.
-                </p>
-              </div>
-            </SpotlightCard>
 
             {/* Mini Bento Stats / Highlights as Spotlight Cards */}
             <div className="grid sm:grid-cols-2 gap-4 mt-4">
