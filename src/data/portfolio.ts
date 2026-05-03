@@ -6,7 +6,7 @@ export const personalInfo = {
   email: "yalakanikhil30@gmail.com",
   linkedin: "https://www.linkedin.com/in/yalaka-nikhil-reddy",
   github: "https://github.com/YNikhil188",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/Yalaka_Nikhil_Reddy_resume.pdf",
 };
 
 export const stats = [
