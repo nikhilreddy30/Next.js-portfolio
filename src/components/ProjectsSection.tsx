@@ -186,10 +186,10 @@ const ProjectsSection = () => {
           className="text-center mb-16 flex flex-col items-center"
         >
           <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/20 text-xs font-mono text-primary mb-6">
-            Portfolio
+            --Work
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            Featured <span className="text-gradient">Work</span>
+            Featured <span className="text-gradient">Projects</span>
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-10 max-w-xl text-lg">
             Backend systems, full-stack products, AI applications, and platform tooling spanning APIs, gateways, UX, automation, retrieval, observability, and production infrastructure.
