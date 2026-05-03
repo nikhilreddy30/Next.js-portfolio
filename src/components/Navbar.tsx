@@ -160,7 +160,7 @@ const Navbar = () => {
         >
           <a href="#hero" aria-label="Go to hero section" className="flex items-center gap-2 group">
             <Image src={logo} alt="" aria-hidden="true" className="w-10 h-10 sm:w-12 sm:h-12 transition-transform duration-300 group-hover:scale-110 pointer-events-none" draggable={false} />
-            <span className="font-bold text-lg tracking-wide hidden sm:block">Nikunj Khitha</span>
+            <span className="font-bold text-lg tracking-wide hidden sm:block">Yalaka Nikhil Reddy</span>
           </a>
 
           <div className="hidden md:flex items-center gap-1.5">
