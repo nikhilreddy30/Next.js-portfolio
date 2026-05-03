@@ -70,7 +70,7 @@ const Footer = () => (
           {/* Mobile: centered social icons above copyright | Desktop: copyright-left icons-right */}
           <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-6">
             <p className="text-xs text-muted-foreground/60 text-center sm:text-left font-medium">
-              © {new Date().getFullYear()} Nikunj Khitha · Built with Next.js &amp; Tailwind
+              © {new Date().getFullYear()} Yalaka Nikhil Reddy · Built with Next.js &amp; Tailwind
             </p>
 
             <div className="flex items-center gap-3">
