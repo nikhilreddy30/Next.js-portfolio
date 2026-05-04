@@ -19,36 +19,52 @@ const CertificationsSection = () => {
       ? certifications
       : certifications.filter((c) => c.issuer === selectedIssuer);
 
-  // ✅ Typed Variants
+  // 🔥 Container animation (stagger)
   const containerVariants: Variants = {
-    hidden: { opacity: 0 },
+    hidden: {},
     show: {
-      opacity: 1,
       transition: {
-        staggerChildren: shouldReduceMotion ? 0.05 : 0.1,
-        delayChildren: shouldReduceMotion ? 0.1 : 0.2,
+        staggerChildren: shouldReduceMotion ? 0.05 : 0.12,
+        delayChildren: 0.15,
       },
     },
   };
 
+  // 🔥 Sliding + 3D Card Animation
   const cardVariants: Variants = {
-    hidden: shouldReduceMotion
-      ? { opacity: 0 }
-      : { opacity: 0, x: -100, rotateY: -90 },
+    hidden: (index: number) =>
+      shouldReduceMotion
+        ? { opacity: 0 }
+        : {
+            opacity: 0,
+            x: index % 2 === 0 ? -120 : 120,
+            rotateY: index % 2 === 0 ? -25 : 25,
+            scale: 0.95,
+          },
+
     show: {
       opacity: 1,
       x: 0,
       rotateY: 0,
+      scale: 1,
       transition: {
-        duration: shouldReduceMotion ? 0.3 : 0.6,
         type: "spring",
-        stiffness: 100,
-        damping: 25,
+        stiffness: 120,
+        damping: 18,
+        mass: 0.8,
       },
     },
-    exit: shouldReduceMotion
-      ? { opacity: 0 }
-      : { opacity: 0, x: 100, rotateY: 90 },
+
+    exit: (index: number) =>
+      shouldReduceMotion
+        ? { opacity: 0 }
+        : {
+            opacity: 0,
+            x: index % 2 === 0 ? 120 : -120,
+            rotateY: index % 2 === 0 ? 25 : -25,
+            scale: 0.9,
+            transition: { duration: 0.3 },
+          },
   };
 
   const headerVariants: Variants = {
@@ -56,9 +72,7 @@ const CertificationsSection = () => {
     show: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0.2 : 0.7,
-      },
+      transition: { duration: shouldReduceMotion ? 0.2 : 0.6 },
     },
   };
 
@@ -68,7 +82,7 @@ const CertificationsSection = () => {
       opacity: 1,
       scale: 1,
       transition: {
-        duration: shouldReduceMotion ? 0.2 : 0.5,
+        duration: shouldReduceMotion ? 0.2 : 0.4,
         type: "spring",
         stiffness: 200,
       },
@@ -125,18 +139,26 @@ const CertificationsSection = () => {
             transition={{ duration: shouldReduceMotion ? 0.2 : 0.6 }}
             className="text-muted-foreground max-w-xl"
           >
-            Industry-recognized certifications validating expertise.
+            Industry-recognized certifications validating expertise in programming,
+            databases, and cloud technologies.
           </motion.p>
         </motion.div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-3 mb-14">
+        <div className="flex flex-wrap justify-center gap-3 mb-14 relative z-10">
+          <div className="inline-flex items-center gap-2 mr-4 text-sm text-muted-foreground">
+            <Filter className="w-4 h-4" />
+            Filter:
+          </div>
+
           {ISSUERS.map((issuer) => (
             <button
               key={issuer}
               onClick={() => setSelectedIssuer(issuer)}
-              className={`px-5 py-2.5 rounded-full text-sm ${
-                selectedIssuer === issuer ? "bg-primary text-white" : ""
+              className={`px-5 py-2.5 rounded-full text-sm transition ${
+                selectedIssuer === issuer
+                  ? "bg-primary text-primary-foreground"
+                  : "glass-subtle text-muted-foreground"
               }`}
             >
               {issuer}
@@ -144,28 +166,66 @@ const CertificationsSection = () => {
           ))}
         </div>
 
-        {/* Grid */}
+        {/* Cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
-          className="grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto"
+          className="grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto perspective"
         >
           {filtered.map((cert, index) => (
             <motion.div
               key={cert.title}
+              custom={index}
               variants={cardVariants}
+              initial="hidden"
+              animate="show"
+              exit="exit"
+              layout
               className="group"
             >
-              <SpotlightCard className="p-6">
-                <h3 className="font-bold">{cert.title}</h3>
-                <p className="text-sm text-muted-foreground">
+              <SpotlightCard className="p-6 h-full">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Award />
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold">{cert.title}</h3>
+                    <span className="text-xs text-primary">
+                      {cert.issuer}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-sm text-muted-foreground mb-4">
                   {cert.description}
                 </p>
+
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Calendar className="w-4 h-4" />
+                  {cert.date}
+                </div>
               </SpotlightCard>
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Empty */}
+        {filtered.length === 0 && (
+          <div className="text-center mt-10">
+            <p className="text-muted-foreground mb-4">
+              No certifications found.
+            </p>
+            <button
+              onClick={() => setSelectedIssuer("All")}
+              className="px-4 py-2 bg-primary text-white rounded"
+            >
+              <X className="inline w-4 h-4 mr-1" />
+              Clear Filters
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
