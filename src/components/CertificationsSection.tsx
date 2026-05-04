@@ -39,7 +39,6 @@ const CertificationsSection = () => {
       rotateY: 0,
       transition: {
         duration: shouldReduceMotion ? 0.3 : 0.6,
-        ease: [0.34, 1.56, 0.64, 1],
         type: "spring",
         stiffness: 100,
         damping: 25,
@@ -57,7 +56,6 @@ const CertificationsSection = () => {
       y: 0,
       transition: {
         duration: shouldReduceMotion ? 0.2 : 0.7,
-        ease: [0.16, 1, 0.3, 1],
       },
     },
   };
