@@ -1,33 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
-import { Award, Calendar } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
+import { Award, Calendar, Filter } from "lucide-react";
 import { certifications } from "@/data/portfolio";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
 const AUTO_PLAY_INTERVAL = 3500;
 
+const ISSUERS = [
+  "All",
+  ...Array.from(new Set(certifications.map((c) => c.issuer))),
+];
+
 const CertificationsSection = () => {
   const [index, setIndex] = useState(0);
+  const [selectedIssuer, setSelectedIssuer] = useState("All");
+  const [isHovered, setIsHovered] = useState(false);
+
   const shouldReduceMotion = useReducedMotion();
-  const total = certifications.length;
 
-  // 👉 Motion values for drag
+  const progress = useMotionValue(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 🎯 Filter
+  const filtered = useMemo(() => {
+    return selectedIssuer === "All"
+      ? certifications
+      : certifications.filter((c) => c.issuer === selectedIssuer);
+  }, [selectedIssuer]);
+
+  const total = filtered.length;
+
+  // 🔁 Reset index on filter change
+  useEffect(() => {
+    setIndex(0);
+    progress.set(0);
+  }, [selectedIssuer]);
+
+  // 👉 Motion values (drag)
   const x = useMotionValue(0);
-
-  // 🔥 3D tilt based on drag
   const rotateY = useTransform(x, [-200, 0, 200], [25, 0, -25]);
-
-  // 🔥 Slight scale effect while dragging
   const scale = useTransform(x, [-200, 0, 200], [0.95, 1, 0.95]);
 
-  // 🔁 Loop paginate
+  // 🔁 Pagination
   const paginate = (dir: number) => {
+    if (total === 0) return;
     setIndex((prev) => (prev + dir + total) % total);
   };
 
-  // 👉 Snap logic
+  // 👉 Jump to specific index (progress click)
+  const goToIndex = (i: number) => {
+    setIndex(i);
+    progress.set(0);
+  };
+
+  // 👉 Drag logic
   const handleDragEnd = (_: any, info: any) => {
     const velocity = info.velocity.x;
     const offset = info.offset.x;
@@ -35,25 +68,41 @@ const CertificationsSection = () => {
     if (offset < -80 || velocity < -500) paginate(1);
     else if (offset > 80 || velocity > 500) paginate(-1);
 
-    x.set(0); // snap back to center
+    x.set(0);
   };
 
-  // 🔄 Auto-play loop
+  // 🔄 Autoplay with progress tracking
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    if (shouldReduceMotion || total <= 1 || isHovered) return;
 
-    const interval = setInterval(() => {
-      paginate(1);
-    }, AUTO_PLAY_INTERVAL);
+    if (intervalRef.current) clearInterval(intervalRef.current);
 
-    return () => clearInterval(interval);
-  }, [index, shouldReduceMotion]);
+    progress.set(0);
+    const duration = AUTO_PLAY_INTERVAL;
+    const start = Date.now();
+
+    intervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const value = elapsed / duration;
+
+      progress.set(value);
+
+      if (value >= 1) {
+        progress.set(0);
+        paginate(1);
+      }
+    }, 50);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [index, total, shouldReduceMotion, isHovered]);
 
   return (
     <section id="certifications" className="section-padding">
       <div className="container-narrow">
         {/* Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
             My <span className="text-gradient">Certifications</span>
           </h2>
@@ -62,9 +111,66 @@ const CertificationsSection = () => {
           </p>
         </div>
 
-        {/* 🔥 Perspective Wrapper */}
-        <div className="relative h-[340px] flex items-center justify-center perspective-[1200px]">
-          {certifications.map((cert, i) => {
+        {/* Filters */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Filter className="w-4 h-4" />
+            Filter:
+          </div>
+
+          {ISSUERS.map((issuer) => (
+            <button
+              key={issuer}
+              onClick={() => setSelectedIssuer(issuer)}
+              className={`px-4 py-2 rounded-full text-sm transition ${
+                selectedIssuer === issuer
+                  ? "bg-primary text-primary-foreground"
+                  : "glass-subtle text-muted-foreground"
+              }`}
+            >
+              {issuer}
+            </button>
+          ))}
+        </div>
+
+        {/* Progress Bars */}
+        {total > 0 && (
+          <div className="flex gap-2 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto mb-6">
+            {filtered.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToIndex(i)}
+                className="flex-1 h-1 bg-white/20 rounded overflow-hidden relative group"
+              >
+                <motion.div
+                  className="h-full bg-primary"
+                  style={{
+                    scaleX:
+                      i === index ? progress : i < index ? 1 : 0,
+                    transformOrigin: "left",
+                  }}
+                  transition={{ ease: "linear" }}
+                />
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Empty */}
+        {total === 0 && (
+          <p className="text-center text-muted-foreground">
+            No certifications found.
+          </p>
+        )}
+
+        {/* Carousel */}
+        <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="relative h-[340px] lg:h-[420px] xl:h-[480px] flex items-center justify-center perspective-[1200px]"
+        >
+          {filtered.map((cert, i) => {
             const offset = (i - index + total) % total;
 
             if (offset > 3) return null;
@@ -74,7 +180,7 @@ const CertificationsSection = () => {
             return (
               <motion.div
                 key={cert.title}
-                className="absolute w-full max-w-md"
+                className="absolute w-full max-w-md lg:max-w-xl xl:max-w-2xl"
                 style={{
                   zIndex: 20 - offset,
                   filter: offset === 0 ? "none" : "blur(4px)",
@@ -91,7 +197,6 @@ const CertificationsSection = () => {
                   damping: 30,
                 }}
               >
-                {/* 👉 Only active card is draggable */}
                 <motion.div
                   drag={isActive ? "x" : false}
                   dragConstraints={{ left: 0, right: 0 }}
@@ -104,7 +209,7 @@ const CertificationsSection = () => {
                   onDragEnd={handleDragEnd}
                   className="cursor-grab active:cursor-grabbing"
                 >
-                  <SpotlightCard className="p-6 backdrop-blur-xl">
+                  <SpotlightCard className="p-6 lg:p-8 xl:p-10 backdrop-blur-xl">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <Award />
@@ -131,22 +236,6 @@ const CertificationsSection = () => {
               </motion.div>
             );
           })}
-        </div>
-
-        {/* Controls */}
-        <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={() => paginate(-1)}
-            className="px-4 py-2 rounded bg-primary text-white"
-          >
-            Prev
-          </button>
-          <button
-            onClick={() => paginate(1)}
-            className="px-4 py-2 rounded bg-primary text-white"
-          >
-            Next
-          </button>
         </div>
       </div>
     </section>
