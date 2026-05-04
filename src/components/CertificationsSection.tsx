@@ -1,25 +1,43 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useReducedMotion, Variants } from "framer-motion";
+import { useState, useMemo } from "react";
+import {
+  motion,
+  useReducedMotion,
+  Variants,
+  AnimatePresence,
+} from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Award, Calendar, Filter, X } from "lucide-react";
 import { certifications } from "@/data/portfolio";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
 
-const ISSUERS = ["All", ...Array.from(new Set(certifications.map((c) => c.issuer)))];
+const ISSUERS = [
+  "All",
+  ...Array.from(new Set(certifications.map((c) => c.issuer))),
+];
+
+// 🔀 Shuffle helper
+const shuffleArray = (array: typeof certifications) => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
 
 const CertificationsSection = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
   const [selectedIssuer, setSelectedIssuer] = useState("All");
   const shouldReduceMotion = useReducedMotion();
 
-  const filtered =
-    selectedIssuer === "All"
+  // 🎯 Filter logic
+  const filtered = useMemo(() => {
+    return selectedIssuer === "All"
       ? certifications
       : certifications.filter((c) => c.issuer === selectedIssuer);
+  }, [selectedIssuer]);
 
-  // 🔥 Container animation (stagger)
+  // 🔥 Shuffle whenever filter changes
+  const shuffled = useMemo(() => shuffleArray(filtered), [filtered]);
+
+  // Container animation
   const containerVariants: Variants = {
     hidden: {},
     show: {
@@ -30,41 +48,51 @@ const CertificationsSection = () => {
     },
   };
 
-  // 🔥 Sliding + 3D Card Animation
+  // 🔥 Shuffle-style animation
   const cardVariants: Variants = {
-    hidden: (index: number) =>
-      shouldReduceMotion
+    hidden: () => {
+      const randomX = Math.random() * 300 - 150;
+      const randomY = Math.random() * 200 - 100;
+      const randomRotate = Math.random() * 40 - 20;
+
+      return shouldReduceMotion
         ? { opacity: 0 }
         : {
             opacity: 0,
-            x: index % 2 === 0 ? -120 : 120,
-            rotateY: index % 2 === 0 ? -25 : 25,
-            scale: 0.95,
-          },
+            x: randomX,
+            y: randomY,
+            rotate: randomRotate,
+            scale: 0.8,
+          };
+    },
 
     show: {
       opacity: 1,
       x: 0,
-      rotateY: 0,
+      y: 0,
+      rotate: 0,
       scale: 1,
       transition: {
         type: "spring",
         stiffness: 120,
-        damping: 18,
-        mass: 0.8,
+        damping: 15,
       },
     },
 
-    exit: (index: number) =>
-      shouldReduceMotion
+    exit: () => {
+      const randomX = Math.random() * 300 - 150;
+      const randomY = Math.random() * 200 - 100;
+
+      return shouldReduceMotion
         ? { opacity: 0 }
         : {
             opacity: 0,
-            x: index % 2 === 0 ? 120 : -120,
-            rotateY: index % 2 === 0 ? 25 : -25,
-            scale: 0.9,
+            x: randomX,
+            y: randomY,
+            scale: 0.7,
             transition: { duration: 0.3 },
-          },
+          };
+    },
   };
 
   const headerVariants: Variants = {
@@ -168,47 +196,50 @@ const CertificationsSection = () => {
 
         {/* Cards */}
         <motion.div
+          layout
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
           className="grid sm:grid-cols-2 gap-6 max-w-5xl mx-auto perspective"
         >
-          {filtered.map((cert, index) => (
-            <motion.div
-              key={cert.title}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              animate="show"
-              exit="exit"
-              layout
-              className="group"
-            >
-              <SpotlightCard className="p-6 h-full">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Award />
+          <AnimatePresence mode="popLayout">
+            {shuffled.map((cert) => (
+              <motion.div
+                key={cert.title}
+                layout
+                layoutId={cert.title}
+                variants={cardVariants}
+                initial="hidden"
+                animate="show"
+                exit="exit"
+                className="group"
+              >
+                <SpotlightCard className="p-6 h-full">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <Award />
+                    </div>
+
+                    <div>
+                      <h3 className="font-bold">{cert.title}</h3>
+                      <span className="text-xs text-primary">
+                        {cert.issuer}
+                      </span>
+                    </div>
                   </div>
 
-                  <div>
-                    <h3 className="font-bold">{cert.title}</h3>
-                    <span className="text-xs text-primary">
-                      {cert.issuer}
-                    </span>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {cert.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Calendar className="w-4 h-4" />
+                    {cert.date}
                   </div>
-                </div>
-
-                <p className="text-sm text-muted-foreground mb-4">
-                  {cert.description}
-                </p>
-
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Calendar className="w-4 h-4" />
-                  {cert.date}
-                </div>
-              </SpotlightCard>
-            </motion.div>
-          ))}
+                </SpotlightCard>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
 
         {/* Empty */}
