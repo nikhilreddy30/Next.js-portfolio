@@ -21,7 +21,7 @@ const ISSUERS = [
 const CertificationsSection = () => {
   const [index, setIndex] = useState(0);
   const [selectedIssuer, setSelectedIssuer] = useState("All");
-  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const shouldReduceMotion = useReducedMotion();
 
@@ -37,13 +37,13 @@ const CertificationsSection = () => {
 
   const total = filtered.length;
 
-  // 🔁 Reset index on filter change
+  // 🔁 Reset index when filter changes
   useEffect(() => {
     setIndex(0);
     progress.set(0);
   }, [selectedIssuer]);
 
-  // 👉 Motion values (drag)
+  // 👉 Motion values
   const x = useMotionValue(0);
   const rotateY = useTransform(x, [-200, 0, 200], [25, 0, -25]);
   const scale = useTransform(x, [-200, 0, 200], [0.95, 1, 0.95]);
@@ -54,7 +54,7 @@ const CertificationsSection = () => {
     setIndex((prev) => (prev + dir + total) % total);
   };
 
-  // 👉 Jump to specific index (progress click)
+  // 👉 Jump via progress click
   const goToIndex = (i: number) => {
     setIndex(i);
     progress.set(0);
@@ -69,11 +69,12 @@ const CertificationsSection = () => {
     else if (offset > 80 || velocity > 500) paginate(-1);
 
     x.set(0);
+    setIsDragging(false);
   };
 
-  // 🔄 Autoplay with progress tracking
+  // 🔄 Autoplay (ONLY pauses while dragging)
   useEffect(() => {
-    if (shouldReduceMotion || total <= 1 || isHovered) return;
+    if (shouldReduceMotion || total <= 1 || isDragging) return;
 
     if (intervalRef.current) clearInterval(intervalRef.current);
 
@@ -96,7 +97,7 @@ const CertificationsSection = () => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [index, total, shouldReduceMotion, isHovered]);
+  }, [index, total, shouldReduceMotion, isDragging]);
 
   return (
     <section id="certifications" className="section-padding">
@@ -165,11 +166,7 @@ const CertificationsSection = () => {
         )}
 
         {/* Carousel */}
-        <div
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          className="relative h-[340px] lg:h-[420px] xl:h-[480px] flex items-center justify-center perspective-[1200px]"
-        >
+        <div className="relative h-[340px] lg:h-[420px] xl:h-[480px] flex items-center justify-center perspective-[1200px]">
           {filtered.map((cert, i) => {
             const offset = (i - index + total) % total;
 
@@ -201,12 +198,13 @@ const CertificationsSection = () => {
                   drag={isActive ? "x" : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   dragElastic={0.6}
+                  onDragStart={() => setIsDragging(true)}
+                  onDragEnd={handleDragEnd}
                   style={{
                     x: isActive ? x : 0,
                     rotateY: isActive ? rotateY : 0,
                     scale: isActive ? scale : 1,
                   }}
-                  onDragEnd={handleDragEnd}
                   className="cursor-grab active:cursor-grabbing"
                 >
                   <SpotlightCard className="p-6 lg:p-8 xl:p-10 backdrop-blur-xl">
