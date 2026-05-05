@@ -30,7 +30,7 @@ const Footer = () => (
           <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4 mb-8">
             <a href="#hero" className="flex items-center gap-3 group shrink-0">
               <div className="relative">
-                <div className="absolute inset-0 bg-primary/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/30 to-accent-secondary/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                 <Image src={logo} alt="" aria-hidden="true" className="w-8 h-8 opacity-80 group-hover:opacity-100 relative z-10 transition-opacity pointer-events-none" draggable={false} />
               </div>
               <span className="text-base font-bold text-muted-foreground group-hover:text-foreground transition-colors tracking-tight">
@@ -61,7 +61,7 @@ const Footer = () => (
             <a
               href={personalInfo.resumeUrl}
               download
-              className="inline-flex items-center justify-center gap-2 self-center sm:self-auto rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+              className="inline-flex items-center justify-center gap-2 self-center sm:self-auto rounded-full border border-primary/25 bg-gradient-to-r from-primary/10 to-accent-secondary/5 px-4 py-2 text-sm font-semibold text-primary transition-all hover:from-primary/15 hover:to-accent-secondary/10 hover:border-primary/40"
             >
               Download Resume
             </a>
@@ -81,7 +81,7 @@ const Footer = () => (
                   target={href.startsWith("mailto") ? undefined : "_blank"}
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 rounded-full glass-subtle border border-white/5 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-white/5 hover:border-primary/20 transition-all duration-300"
+                  className="w-10 h-10 rounded-full glass-subtle border border-white/5 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent-secondary/5 hover:border-primary/30 transition-all duration-300"
                 >
                   <Icon className="w-4 h-4" />
                 </a>

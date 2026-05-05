@@ -137,7 +137,7 @@ const ContactSection = () => {
           transition={{ duration: shouldReduceMotion ? 0.2 : 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-14"
         >
-          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/20 text-xs font-mono text-primary mb-6">
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
             Connect
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
@@ -192,7 +192,7 @@ const ContactSection = () => {
                       rel="noopener noreferrer"
                       className="group flex items-center gap-4 px-5 py-4 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 border border-black/5 dark:border-white/5 hover:border-primary/20 dark:hover:border-primary/20 transition-all duration-300"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/15 to-accent-secondary/10 flex items-center justify-center shrink-0 group-hover:from-primary/25 group-hover:to-accent-secondary/15 transition-all">
                         <Icon className="w-4 h-4 text-primary" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -210,13 +210,13 @@ const ContactSection = () => {
                 <a
                   href={personalInfo.resumeUrl}
                   download
-                  className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-[0_0_16px_rgba(41,214,185,0.14)] hover:shadow-[0_0_24px_rgba(41,214,185,0.2)] transition-all duration-300 active:scale-[0.98]"
+                  className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-gradient-to-r from-primary to-accent-secondary text-white font-bold text-sm tracking-wide shadow-accent-strong hover:shadow-[0_0_32px_hsla(262,83%,58%,0.35)] transition-all duration-300 active:scale-[0.98]"
                 >
                   <Download className="w-4 h-4" />
                   Download Resume
                 </a>
                 <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground border-t border-black/10 dark:border-white/5 pt-4">
-                  <span className="w-2 h-2 rounded-full bg-primary animate-pulse motion-reduce:animate-none shrink-0 shadow-[0_0_6px_rgba(41,214,185,0.28)]" />
+                  <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent-secondary animate-pulse motion-reduce:animate-none shrink-0 glow-primary" />
                   Available for new opportunities
                 </div>
               </div>

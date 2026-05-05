@@ -92,12 +92,13 @@ const SkillsSection = () => {
 
           {/* Left Column: Sticky Header */}
           <div className="w-full lg:w-1/3 lg:sticky lg:top-32 shrink-0">
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 shadow-[0_0_40px_rgba(41,214,185,0.08)]">
-              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-              <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-accent/10 blur-3xl" />
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 glow-accent">
+              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-start)/0.15)] blur-3xl" />
+              <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-mid)/0.12)] blur-3xl" />
+              <div className="absolute bottom-0 right-0 h-32 w-32 rounded-full bg-[hsl(var(--gradient-end)/0.1)] blur-3xl" />
 
               <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/20 text-xs font-mono text-primary mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
                   Expertise
                 </div>
                 <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
@@ -135,10 +136,10 @@ const SkillsSection = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-2.5">
-                      {cat.skills.map((skill) => (
+                      {cat.skills.map((skill, idx) => (
                         <span
                           key={skill}
-                          className="px-4 py-2 rounded-xl text-sm font-medium glass-subtle text-foreground/80 border border-white/5 hover:bg-white/10 hover:border-primary/40 hover:text-primary transition-all duration-300 select-none"
+                          className="px-4 py-2 rounded-xl text-sm font-medium glass-subtle text-foreground/80 border border-white/5 hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent-secondary/5 hover:border-primary/40 hover:text-primary transition-all duration-300 select-none"
                         >
                           {skill}
                         </span>

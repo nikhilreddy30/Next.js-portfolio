@@ -85,13 +85,17 @@ const HeroSection = () => {
     >
       {/* Subtle background grid & Animated Glow Orb */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
-        backgroundImage: "radial-gradient(hsl(var(--accent)) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(hsl(var(--gradient-start)) 1px, transparent 1px)",
         backgroundSize: "32px 32px",
       }} />
-      
-      {/* Massive Glowing Animated Orbs */}
-      <div className="absolute top-1/4 -right-1/4 w-[800px] h-[800px] rounded-full animate-[pulse_8s_ease-in-out_infinite] motion-reduce:animate-none opacity-50 pointer-events-none bg-[radial-gradient(circle,hsl(var(--primary)/0.2)_0%,transparent_70%)]" />
-      <div className="absolute bottom-0 -left-1/4 w-[600px] h-[600px] rounded-full animate-[pulse_10s_ease-in-out_infinite_reverse] motion-reduce:animate-none opacity-40 pointer-events-none bg-[radial-gradient(circle,hsl(var(--accent)/0.2)_0%,transparent_70%)]" />
+
+      {/* Mesh gradient background */}
+      <div className="absolute inset-0 bg-gradient-mesh opacity-60 pointer-events-none" />
+
+      {/* Massive Glowing Animated Orbs - Multi-color */}
+      <div className="absolute top-1/4 -right-1/4 w-[800px] h-[800px] rounded-full animate-[pulse_8s_ease-in-out_infinite] motion-reduce:animate-none opacity-50 pointer-events-none bg-[radial-gradient(circle,hsl(var(--gradient-start)/0.25)_0%,hsl(var(--gradient-mid)/0.1)_40%,transparent_70%)]" />
+      <div className="absolute bottom-0 -left-1/4 w-[600px] h-[600px] rounded-full animate-[pulse_10s_ease-in-out_infinite_reverse] motion-reduce:animate-none opacity-40 pointer-events-none bg-[radial-gradient(circle,hsl(var(--gradient-mid)/0.2)_0%,hsl(var(--gradient-end)/0.1)_40%,transparent_70%)]" />
+      <div className="absolute top-1/2 left-1/3 w-[400px] h-[400px] rounded-full animate-[pulse_12s_ease-in-out_infinite] motion-reduce:animate-none opacity-30 pointer-events-none bg-[radial-gradient(circle,hsl(var(--gradient-end)/0.15)_0%,transparent_60%)]" />
       
       {/* Smooth fade into the next section */}
       <div className="absolute bottom-0 inset-x-0 h-32 sm:h-64 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-0" />
@@ -102,8 +106,8 @@ const HeroSection = () => {
           {/* Left - Content */}
           <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-6 sm:gap-8 lg:col-span-7">
             <motion.div variants={item}>
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold glass-subtle border border-primary/20 text-primary tracking-wide shadow-[0_0_12px_rgba(41,214,185,0.1)]">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse motion-reduce:animate-none" />
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold glass-subtle border border-primary/30 text-primary tracking-wide glow-accent">
+                <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent-secondary animate-pulse motion-reduce:animate-none" />
                 Available for New Opportunities
               </span>
             </motion.div>
@@ -124,24 +128,24 @@ const HeroSection = () => {
             <motion.div variants={item} className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mt-1 sm:mt-2">
               <a
                 href="#projects"
-                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-3.5 rounded-full bg-primary text-primary-foreground font-bold text-sm tracking-wide shadow-[0_0_20px_rgba(41,214,185,0.18)] hover:shadow-[0_0_28px_rgba(41,214,185,0.24)] transition-all duration-300 active:scale-95"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-primary via-accent-secondary to-primary bg-[length:200%_auto] text-white font-bold text-sm tracking-wide shadow-accent-strong hover:shadow-[0_0_32px_hsla(262,83%,58%,0.35)] hover:bg-right transition-all duration-500 active:scale-95"
               >
                 View Projects
-                <ArrowDown className="w-4 h-4 ml-1" />
+                <ArrowDown className="w-4 h-4 ml-1 group-hover:translate-y-0.5 transition-transform" />
               </a>
               <a
                 href={personalInfo.resumeUrl}
                 download
-                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-3.5 rounded-full bg-white/5 dark:bg-white/[0.02] backdrop-blur-lg border border-primary/50 dark:border-primary/50 font-bold text-foreground text-sm tracking-wide hover:bg-primary/10 transition-all duration-300 active:scale-95"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 py-3.5 rounded-full bg-white/5 dark:bg-white/[0.02] backdrop-blur-lg border border-primary/40 dark:border-primary/40 font-bold text-foreground text-sm tracking-wide hover:bg-primary/10 hover:border-primary/60 transition-all duration-300 active:scale-95"
               >
-                <Download className="w-4 h-4 mr-1 text-primary" />
+                <Download className="w-4 h-4 mr-1 text-primary group-hover:text-accent-secondary transition-colors" />
                 Resume
               </a>
               <a
                 href="#ai-twin"
-                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3.5 rounded-full hover:bg-white/5 transition-all duration-300 font-semibold text-sm text-muted-foreground hover:text-foreground active:scale-95"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3.5 rounded-full hover:bg-white/5 transition-all duration-300 font-semibold text-sm text-muted-foreground hover:text-foreground active:scale-95"
               >
-                <MessageCircle className="w-4 h-4 text-primary" />
+                <MessageCircle className="w-4 h-4 text-primary group-hover:text-accent-tertiary transition-colors" />
                 Talk to AI Twin
               </a>
             </motion.div>
@@ -153,8 +157,10 @@ const HeroSection = () => {
               onAnimationStart={() => setStatsRevealStarted(true)}
               className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-6"
             >
-              {stats.map((stat) => (
-                <div key={stat.label} className="border-l-2 border-primary/30 pl-4 py-1">
+              {stats.map((stat, i) => (
+                <div key={stat.label} className="border-l-2 border-transparent pl-4 py-1" style={{
+                  borderImage: `linear-gradient(to bottom, hsl(var(--gradient-start)), hsl(var(--gradient-mid))) 1`,
+                }}>
                   <div className="text-2xl font-bold tracking-tighter text-foreground">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} start={shouldStartStats} />
                   </div>
@@ -171,7 +177,7 @@ const HeroSection = () => {
             transition={{ duration: shouldReduceMotion ? 0.2 : 1.2, delay: shouldReduceMotion ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="hidden lg:flex justify-end lg:col-span-5 relative"
           >
-             <div className="absolute inset-0 bg-[radial-gradient(circle,hsl(var(--primary)/0.15)_0%,transparent_70%)] rounded-full scale-150" />
+             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--gradient-start)/0.2)_0%,hsl(var(--gradient-mid)/0.1)_40%,transparent_70%)] rounded-full scale-150" />
              <div className="relative z-10 w-full max-w-[500px] xl:max-w-[600px] lg:scale-110 xl:scale-125 lg:origin-right lg:translate-x-4 xl:translate-x-12">
               <Card3D className="w-full">
                   <Image
