@@ -298,7 +298,7 @@ const ProjectsSection = () => {
           className="flex justify-center mt-12"
         >
           <a
-            href="https://github.com/Nikunj2003"
+            href="https://github.com/YNikhil188"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/10 border-b-white/5 text-sm font-bold text-foreground hover:text-primary hover:bg-white/10 transition-all duration-300 shadow-accent-soft hover:shadow-[0_0_18px_rgba(41,214,185,0.12)] active:scale-95"
