@@ -37,7 +37,7 @@ const CertificationsSection = () => {
 
   const total = filtered.length;
 
-  // 🔁 Reset index when filter changes
+  // 🔁 Reset on filter change
   useEffect(() => {
     setIndex(0);
     progress.set(0);
@@ -46,7 +46,7 @@ const CertificationsSection = () => {
   // 👉 Motion values
   const x = useMotionValue(0);
   const rotateY = useTransform(x, [-200, 0, 200], [25, 0, -25]);
-  const scale = useTransform(x, [-200, 0, 200], [0.95, 1, 0.95]);
+  const scale = useTransform(x, [-200, 0, 200], [0.96, 1, 0.96]);
 
   // 🔁 Pagination
   const paginate = (dir: number) => {
@@ -54,13 +54,13 @@ const CertificationsSection = () => {
     setIndex((prev) => (prev + dir + total) % total);
   };
 
-  // 👉 Jump via progress click
+  // 👉 Jump via progress
   const goToIndex = (i: number) => {
     setIndex(i);
     progress.set(0);
   };
 
-  // 👉 Drag logic
+  // 👉 Drag
   const handleDragEnd = (_: any, info: any) => {
     const velocity = info.velocity.x;
     const offset = info.offset.x;
@@ -72,7 +72,7 @@ const CertificationsSection = () => {
     setIsDragging(false);
   };
 
-  // 🔄 Autoplay (ONLY pauses while dragging)
+  // 🔄 Autoplay
   useEffect(() => {
     if (shouldReduceMotion || total <= 1 || isDragging) return;
 
@@ -136,7 +136,7 @@ const CertificationsSection = () => {
 
         {/* Progress Bars */}
         {total > 0 && (
-          <div className="flex gap-2 max-w-md lg:max-w-xl xl:max-w-2xl mx-auto mb-6">
+          <div className="flex gap-2 w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] mx-auto mb-6">
             {filtered.map((_, i) => (
               <button
                 key={i}
@@ -150,7 +150,6 @@ const CertificationsSection = () => {
                       i === index ? progress : i < index ? 1 : 0,
                     transformOrigin: "left",
                   }}
-                  transition={{ ease: "linear" }}
                 />
                 <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition" />
               </button>
@@ -166,7 +165,7 @@ const CertificationsSection = () => {
         )}
 
         {/* Carousel */}
-        <div className="relative h-[340px] lg:h-[420px] xl:h-[480px] flex items-center justify-center perspective-[1200px]">
+        <div className="relative h-[360px] sm:h-[420px] lg:h-[520px] xl:h-[600px] flex items-center justify-center perspective-[1200px]">
           {filtered.map((cert, i) => {
             const offset = (i - index + total) % total;
 
@@ -177,21 +176,21 @@ const CertificationsSection = () => {
             return (
               <motion.div
                 key={cert.title}
-                className="absolute w-full max-w-md lg:max-w-xl xl:max-w-2xl"
+                className="absolute w-[90%] sm:w-[80%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[45%]"
                 style={{
                   zIndex: 20 - offset,
                   filter: offset === 0 ? "none" : "blur(4px)",
                 }}
                 animate={{
-                  x: offset * 30,
-                  y: offset * 12,
-                  scale: 1 - offset * 0.07,
-                  opacity: 1 - offset * 0.25,
+                  x: offset * 40,
+                  y: offset * 16,
+                  scale: 1 - offset * 0.08,
+                  opacity: 1 - offset * 0.3,
                 }}
                 transition={{
                   type: "spring",
-                  stiffness: 300,
-                  damping: 30,
+                  stiffness: 280,
+                  damping: 28,
                 }}
               >
                 <motion.div
@@ -207,26 +206,28 @@ const CertificationsSection = () => {
                   }}
                   className="cursor-grab active:cursor-grabbing"
                 >
-                  <SpotlightCard className="p-6 lg:p-8 xl:p-10 backdrop-blur-xl">
+                  <SpotlightCard className="p-6 sm:p-8 lg:p-10 xl:p-12 backdrop-blur-xl">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <div className="h-12 w-12 lg:h-14 lg:w-14 xl:h-16 xl:w-16 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <Award />
                       </div>
 
                       <div>
-                        <h3 className="font-bold">{cert.title}</h3>
-                        <span className="text-xs text-primary">
+                        <h3 className="font-bold text-base sm:text-lg lg:text-xl xl:text-2xl">
+                          {cert.title}
+                        </h3>
+                        <span className="text-xs sm:text-sm text-primary">
                           {cert.issuer}
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-sm sm:text-base lg:text-lg text-muted-foreground mb-4">
                       {cert.description}
                     </p>
 
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
+                    <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                      <Calendar className="w-4 h-4 lg:w-5 lg:h-5" />
                       {cert.date}
                     </div>
                   </SpotlightCard>
