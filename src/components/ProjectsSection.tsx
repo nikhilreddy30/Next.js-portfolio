@@ -185,7 +185,7 @@ const ProjectsSection = () => {
           transition={{ duration: shouldReduceMotion ? 0.2 : 0.7, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16 flex flex-col items-center"
         >
-          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/20 text-xs font-mono text-primary mb-6">
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
             --Work
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
@@ -205,8 +205,8 @@ const ProjectsSection = () => {
                 aria-pressed={filter === cat}
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 active:scale-95 border ${
                   filter === cat
-                    ? "bg-primary text-primary-foreground border-primary shadow-[0_0_14px_rgba(41,214,185,0.18)]"
-                    : "glass-subtle text-muted-foreground border-white/5 hover:text-foreground hover:bg-white/10 hover:border-white/10"
+                    ? "bg-gradient-to-r from-primary to-accent-secondary text-white border-transparent shadow-accent-soft"
+                    : "glass-subtle text-muted-foreground border-white/5 hover:text-foreground hover:bg-white/10 hover:border-primary/30"
                 }`}
               >
                 {cat}
@@ -246,10 +246,10 @@ const ProjectsSection = () => {
                       </p>
                       
                       <div className="flex flex-wrap gap-2 mb-8">
-                        {project.tech.map((t) => (
+                        {project.tech.map((t, idx) => (
                           <span
                             key={t}
-                            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-primary/10 text-primary border border-primary/20 backdrop-blur-sm"
+                            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-gradient-to-r from-primary/10 to-accent-secondary/5 text-primary border border-primary/25 backdrop-blur-sm hover:border-primary/40 transition-colors"
                           >
                             {t}
                           </span>
@@ -301,7 +301,7 @@ const ProjectsSection = () => {
             href="https://github.com/YNikhil188"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/10 border-b-white/5 text-sm font-bold text-foreground hover:text-primary hover:bg-white/10 transition-all duration-300 shadow-accent-soft hover:shadow-[0_0_18px_rgba(41,214,185,0.12)] active:scale-95"
+            className="group flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/10 border-b-white/5 text-sm font-bold text-foreground hover:text-primary hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent-secondary/5 transition-all duration-300 shadow-accent-soft hover:glow-accent active:scale-95"
           >
             <Github className="w-5 h-5" />
             Explore more repositories

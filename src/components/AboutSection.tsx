@@ -26,19 +26,20 @@ const AboutSection = () => {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: shouldReduceMotion ? 0.2 : 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 shadow-[0_0_40px_rgba(41,214,185,0.08)]">
-                <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-                <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-accent/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 glow-accent">
+                <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-start)/0.15)] blur-3xl" />
+                <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-mid)/0.12)] blur-3xl" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-32 w-32 rounded-full bg-[hsl(var(--gradient-end)/0.08)] blur-3xl" />
 
                 <div className="relative">
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-xs font-mono font-bold text-primary shadow-[0_0_12px_rgba(41,214,185,0.1)]">
-                    <span className="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_rgba(41,214,185,0.6)]" />
+                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-mono font-bold text-primary glow-primary">
+                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-primary to-accent-secondary" />
                     Profile
                   </div>
 
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border border-primary/20 bg-primary/10">
-                      <div className="absolute inset-0 rounded-3xl bg-primary/20 blur-xl" />
+                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/15 to-accent-secondary/10">
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/25 to-accent-secondary/15 blur-xl" />
                       <Image src={logo} alt="" aria-hidden="true" className="relative z-10 h-12 w-12 opacity-90 pointer-events-none" draggable={false} />
                     </div>
 

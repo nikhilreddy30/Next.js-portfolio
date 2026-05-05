@@ -172,7 +172,7 @@ const Navbar = () => {
                 aria-current={activeSection === link.href ? "location" : undefined}
                 className={`px-3 py-2 text-sm font-medium transition-all duration-200 rounded-full ${
                   activeSection === link.href
-                    ? "bg-primary/10 text-primary shadow-[0_0_14px_rgba(41,214,185,0.1)]"
+                    ? "bg-gradient-to-r from-primary/15 to-accent-secondary/10 text-primary glow-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/10"
                 }`}
               >
@@ -184,7 +184,7 @@ const Navbar = () => {
             <a
               href={personalInfo.resumeUrl}
               download
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 active:scale-[0.97] ml-2"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-full bg-gradient-to-r from-primary/10 to-accent-secondary/5 border border-primary/25 text-primary hover:from-primary hover:to-accent-secondary hover:text-white hover:border-transparent transition-all duration-300 active:scale-[0.97] ml-2"
             >
               <Download className="w-3.5 h-3.5" />
               Resume
@@ -251,7 +251,7 @@ const Navbar = () => {
                   href={personalInfo.resumeUrl}
                   download
                   onClick={() => closeMenu(false)}
-                  className="flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold rounded-xl bg-primary text-primary-foreground active:scale-[0.97]"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-bold rounded-xl bg-gradient-to-r from-primary to-accent-secondary text-white active:scale-[0.97]"
                 >
                   <Download className="w-4 h-4" />
                   Resume
