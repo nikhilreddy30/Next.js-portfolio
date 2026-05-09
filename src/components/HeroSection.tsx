@@ -3,10 +3,8 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { ArrowDown, MessageCircle, Download } from "lucide-react";
+import { ArrowDown, Download } from "lucide-react";
 import { personalInfo, stats } from "@/data/portfolio";
-import Card3D from "./Card3D";
-import cardImage from "@/assets/card.png";
 
 const AnimatedCounter = ({ value, suffix, start }: { value: number; suffix: string; start: boolean }) => {
   const [count, setCount] = useState(0);
@@ -81,7 +79,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] items-start overflow-hidden pt-[calc(5rem+env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pb-[max(2.5rem,env(safe-area-inset-bottom))] lg:min-h-screen lg:items-center lg:pt-20 lg:pb-12"
+      className="relative flex min-h-[100svh] items-center overflow-hidden pt-[calc(5rem+env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pb-[max(2.5rem,env(safe-area-inset-bottom))] lg:min-h-screen lg:pt-20 lg:pb-12"
     >
       {/* Subtle background grid & Animated Glow Orb */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
@@ -100,11 +98,11 @@ const HeroSection = () => {
       {/* Smooth fade into the next section */}
       <div className="absolute bottom-0 inset-x-0 h-32 sm:h-64 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-0" />
 
-      <div className="container-narrow relative z-10 w-full">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Left - Content */}
-          <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-6 sm:gap-8 lg:col-span-7">
+        <div className="container-narrow relative z-10 w-full h-full flex items-center justify-center">
+          <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+            
+            {/* Centered Content */}
+            <motion.div variants={container} initial="hidden" animate="show" className="flex flex-col gap-6 sm:gap-8 w-full items-center">
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold glass-subtle border border-primary/30 text-primary tracking-wide glow-accent">
                 <span className="w-2 h-2 rounded-full bg-gradient-to-r from-primary to-accent-secondary animate-pulse motion-reduce:animate-none" />
@@ -113,7 +111,10 @@ const HeroSection = () => {
             </motion.div>
 
             <div className="flex flex-col gap-2">
-              <motion.h1 variants={item} className="text-4xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.1] sm:leading-[1.05]">
+              <motion.h1
+                variants={item}
+                className="text-4xl sm:text-7xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.1] sm:leading-[1.05] gradient-text"
+              >
                 {personalInfo.name}
               </motion.h1>
               <motion.h2 variants={item} className="text-xl sm:text-4xl font-semibold tracking-tight text-muted-foreground mt-2">
@@ -141,61 +142,13 @@ const HeroSection = () => {
                 <Download className="w-4 h-4 mr-1 text-primary group-hover:text-accent-secondary transition-colors" />
                 Resume
               </a>
-              <a
-                href="#ai-twin"
-                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 px-6 py-3.5 rounded-full hover:bg-white/5 transition-all duration-300 font-semibold text-sm text-muted-foreground hover:text-foreground active:scale-95"
-              >
-                <MessageCircle className="w-4 h-4 text-primary group-hover:text-accent-tertiary transition-colors" />
-                Talk to AI Twin
-              </a>
-            </motion.div>
 
-            {/* Stats */}
-            <motion.div
-              ref={statsTriggerRef}
-              variants={item}
-              onAnimationStart={() => setStatsRevealStarted(true)}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-6"
-            >
-              {stats.map((stat, i) => (
-                <div key={stat.label} className="border-l-2 border-transparent pl-4 py-1" style={{
-                  borderImage: `linear-gradient(to bottom, hsl(var(--gradient-start)), hsl(var(--gradient-mid))) 1`,
-                }}>
-                  <div className="text-2xl font-bold tracking-tighter text-foreground">
-                    <AnimatedCounter value={stat.value} suffix={stat.suffix} start={shouldStartStats} />
-                  </div>
-                  <div className="text-xs font-medium text-muted-foreground mt-1 uppercase tracking-wider">{stat.label}</div>
-                </div>
-              ))}
             </motion.div>
-          </motion.div>
-
-          {/* Right - 3D Card wrapped in a delicate glow */}
-          <motion.div
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: shouldReduceMotion ? 0.2 : 1.2, delay: shouldReduceMotion ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex justify-end lg:col-span-5 relative"
-          >
-             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--gradient-start)/0.2)_0%,hsl(var(--gradient-mid)/0.1)_40%,transparent_70%)] rounded-full scale-150" />
-             <div className="relative z-10 w-full max-w-[500px] xl:max-w-[600px] lg:scale-110 xl:scale-125 lg:origin-right lg:translate-x-4 xl:translate-x-12">
-              <Card3D className="w-full">
-                  <Image
-                     src={cardImage}
-                     alt=""
-                     aria-hidden="true"
-                     className="w-full h-auto rounded-3xl border border-white/10 shadow-accent-strong pointer-events-none select-none"
-                    draggable={false}
-                    priority
-                    sizes="(min-width: 1280px) 600px, (min-width: 1024px) 500px, 100vw"
-                  />
-              </Card3D>
-             </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
+           </motion.div>
+         </div>
+       </div>
+     </section>
+   );
+ };
 
 export default HeroSection;
