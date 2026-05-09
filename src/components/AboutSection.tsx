@@ -1,99 +1,132 @@
 "use client";
+
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { Award } from "lucide-react";
-import { about, personalInfo } from "@/data/portfolio";
-import logo from "@/assets/logo.png";
-
-import { SpotlightCard } from "@/components/ui/spotlight-card";
-
-const profileFocus = ["Backend systems", "Full-stack platforms", "Production GenAI"];
+import { motion } from "framer-motion";
 
 const AboutSection = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  const shouldReduceMotion = useReducedMotion();
+  const stats = [
+    { label: "CGPA", value: "8.5 / 10", icon: "🎓" },
+    { label: "Projects Completed", value: "3+", icon: "📦" },
+    { label: "Certifications Earned", value: "18+", icon: "📜" },
+  ];
 
   return (
-    <section id="about" className="section-padding relative z-10">
-      <div className="container-narrow" ref={ref}>
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
-          
-          {/* Left Column: Sticky Header */}
-          <div className="w-full lg:w-1/3 lg:sticky lg:top-32 shrink-0">
-            <motion.div
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: shouldReduceMotion ? 0.2 : 0.7, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 glow-accent">
-                <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-start)/0.15)] blur-3xl" />
-                <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-mid)/0.12)] blur-3xl" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-32 w-32 rounded-full bg-[hsl(var(--gradient-end)/0.08)] blur-3xl" />
+    <section id="about" className="py-20 text-white">
+      <div className="max-w-7xl mx-auto px-6">
 
-                <div className="relative">
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-mono font-bold text-primary glow-primary">
-                    <span className="h-2 w-2 rounded-full bg-gradient-to-r from-primary to-accent-secondary" />
-                    Profile
-                  </div>
+        {/* Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+            About{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Me
+            </span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
+        </motion.div>
 
-                  <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/15 to-accent-secondary/10">
-                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/25 to-accent-secondary/15 blur-xl" />
-                      <Image src={logo} alt="" aria-hidden="true" className="relative z-10 h-12 w-12 opacity-90 pointer-events-none" draggable={false} />
-                    </div>
+        <div className="grid md:grid-cols-2 gap-12 items-center">
 
-                    <div>
-                      <p className="mb-1 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">About</p>
-                      <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
-                        <span className="text-gradient">Nikhil</span>
-                      </h2>
-                    </div>
-                  </div>
-
-                  <p className="mb-6 text-sm font-medium leading-relaxed text-foreground/85 sm:text-base">
-                    {personalInfo.role} focused on backend architecture, full-stack product delivery, AI security, and reliable agent systems.
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {profileFocus.map((item) => (
-                      <span key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+          {/* Left - Profile Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex justify-center"
+          >
+            <div className="relative w-72 h-72">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full rotate-6 blur-xl opacity-40" />
+              
+              <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-gray-700 hover:border-cyan-400 transition">
+                <Image
+                  src="/profile.png"
+                  alt="Nikhil"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
-            </motion.div>
-          </div>
-
-          {/* Right Column: Content */}
-          <div className="lg:w-2/3 flex flex-col gap-10">
-            <motion.div
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: shouldReduceMotion ? 0.2 : 0.7, delay: shouldReduceMotion ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="prose prose-invert prose-lg max-w-none text-muted-foreground leading-relaxed"
-            >
-              <p className="text-xl sm:text-2xl font-medium text-foreground tracking-tight leading-snug mb-6" style={{ textWrap: "pretty" }}>
-                {about.summary}              
-              </p>
-            </motion.div>
-
-            {/* Mini Bento Stats / Highlights as Spotlight Cards */}
-            <div className="grid sm:grid-cols-2 gap-4 mt-4">
-              {about.highlights.map((h, i) => (
-                <SpotlightCard key={i} delay={0.3 + i * 0.1} className="h-full">
-                  <div className="p-6 h-full flex flex-col justify-center">
-                    <p className="text-sm text-foreground/80 leading-relaxed font-medium">
-                      {h}
-                    </p>
-                  </div>
-                </SpotlightCard>
-              ))}
             </div>
+          </motion.div>
+
+          {/* Right - Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6"
+          >
+            <h3 className="text-3xl font-bold">
+              Hi, I'm{" "}
+              <span className="text-cyan-400">Nikhil 👋</span>
+            </h3>
+
+            {/* About Text */}
+            <div className="text-gray-300 leading-relaxed space-y-4 text-lg">
+              <p>
+                <span className="text-cyan-400 font-semibold">
+                  Computer Science Engineering student
+                </span>{" "}
+                with hands-on experience in{" "}
+                <span className="text-cyan-400">web application development</span>.
+              </p>
+
+              <p>
+                Proficient in{" "}
+                <span className="text-cyan-400 font-semibold">Java</span>,{" "}
+                <span className="text-cyan-400 font-semibold">Python</span>, and{" "}
+                <span className="text-cyan-400">modern web technologies</span>, with practical
+                exposure to{" "}
+                <span className="text-cyan-400">MERN stack</span> and{" "}
+                <span className="text-cyan-400">PHP–MySQL applications</span>.
+              </p>
+
+              <p>
+                Passionate about{" "}
+                <span className="text-cyan-400">problem-solving</span>,{" "}
+                <span className="text-cyan-400">clean code</span>, and{" "}
+                <span className="text-cyan-400">scalable systems</span>, while continuously
+                learning{" "}
+                <span className="text-cyan-400">industry-level development practices</span>.
+              </p>
+
+              <p className="text-cyan-400 font-semibold text-xl">
+                🎯 Goal: Full Stack Developer + AI Integration
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 pt-4">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center bg-gray-800 rounded-xl p-4 border border-gray-700 hover:border-cyan-400 transition"
+              >
+                {/* ✅ Icon */}
+                <div className="text-2xl mb-2">{stat.icon}</div>
+          
+                {/* Value */}
+                <div className="text-3xl font-bold text-cyan-400">
+                  {stat.value}
+                </div>
+          
+                {/* Label */}
+                <div className="text-gray-400 text-sm">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
 
+          </motion.div>
         </div>
       </div>
     </section>

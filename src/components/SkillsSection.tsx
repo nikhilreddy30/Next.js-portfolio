@@ -1,157 +1,292 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Brain, Layers, Database, Server, Wrench } from "lucide-react";
-import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Code2,
+  Layers,
+  Database,
+  FileCode,
+  Palette,
+  Server,
+  GitBranch,
+  Github,
+  Container,
+  Flame,
+  Terminal,
+  Key,
+  Table,
+  Cpu,
+  Braces,
+} from "lucide-react";
 import { skillCategories } from "@/data/portfolio";
 
-const SKILL_LINES = ["Learning fast.", "Building deep.", "Shipping reliably."];
-
-function FlipSkill() {
-  const [currentLine, setCurrentLine] = useState(SKILL_LINES[0]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const shouldReduceMotion = useReducedMotion();
-
-  const startAnimation = useCallback(() => {
-    const line = SKILL_LINES[SKILL_LINES.indexOf(currentLine) + 1] || SKILL_LINES[0];
-    setCurrentLine(line);
-    setIsAnimating(true);
-  }, [currentLine]);
-
-  useEffect(() => {
-    const handler = () => setIsVisible(!document.hidden);
-    document.addEventListener("visibilitychange", handler);
-    return () => document.removeEventListener("visibilitychange", handler);
-  }, []);
-
-  useEffect(() => {
-    if (!isAnimating && isVisible) {
-      const id = window.setTimeout(() => startAnimation(), 3000);
-      return () => window.clearTimeout(id);
-    }
-  }, [isAnimating, isVisible, startAnimation]);
-
-  return (
-    <motion.h3
-      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: shouldReduceMotion ? 0.2 : 0.5 }}
-      className="mt-10 text-left text-base font-semibold text-foreground sm:text-xl md:text-2xl"
-    >
-      <AnimatePresence onExitComplete={() => setIsAnimating(false)}>
-        <motion.span
-          key={currentLine}
-          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={
-            shouldReduceMotion
-              ? { duration: 0.2 }
-              : { type: "spring", stiffness: 100, damping: 10 }
-          }
-          exit={
-            shouldReduceMotion
-              ? { opacity: 0 }
-              : { opacity: 0, y: -40, x: 40, filter: "blur(8px)", scale: 2, position: "absolute" }
-          }
-          className="relative inline-block text-left text-primary"
-        >
-          {currentLine.split("").map((letter, index) => (
-            <motion.span
-              key={`${currentLine}-${index}`}
-              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: index * (shouldReduceMotion ? 0.02 : 0.08), duration: shouldReduceMotion ? 0.18 : 0.4 }}
-              className="inline-block"
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </motion.span>
-          ))}
-        </motion.span>
-      </AnimatePresence>
-    </motion.h3>
-  );
-}
-
-// Icons for each category
-const CATEGORY_ICONS: Record<string, React.ElementType> = {
-  "Backend & Product Engineering": Layers,
-  "GenAI, Agents & Retrieval": Brain,
-  "Data & Search Infrastructure": Database,
-  "Platform, DevOps & Delivery": Server,
-  "Product Tooling & UX": Wrench,
+// Skill type definition
+type Skill = {
+  name: string;
+  level: number;
+  category: string;
+  icon: string;
 };
 
-const SkillsSection = () => {
+// Build skills array from portfolio data
+const buildSkillsFromCategories = (): Skill[] => {
+  const skillsMap: Record<string, { category: string; icon: string; level: number }> = {
+    // Programming Languages
+    "Java": { category: "languages", icon: "Code2", level: 85 },
+    "Python": { category: "languages", icon: "Code2", level: 75 },
+    "JavaScript": { category: "languages", icon: "FileCode", level: 90 },
+    "PHP": { category: "languages", icon: "Server", level: 70 },
+
+    // Frontend
+    "HTML5": { category: "frontend", icon: "FileCode", level: 95 },
+    "CSS3": { category: "frontend", icon: "Palette", level: 90 },
+    "React": { category: "frontend", icon: "Layers", level: 90 },
+    "Tailwind CSS": { category: "frontend", icon: "Palette", level: 85 },
+
+    // Backend
+    "Node.js": { category: "backend", icon: "Server", level: 90 },
+    "Express.js": { category: "backend", icon: "Server", level: 85 },
+    "REST APIs": { category: "backend", icon: "Braces", level: 85 },
+    "JWT": { category: "backend", icon: "Key", level: 80 },
+
+    // Database
+    "MySQL": { category: "database", icon: "Database", level: 85 },
+    "MongoDB": { category: "database", icon: "Database", level: 90 },
+    "Database Design": { category: "database", icon: "Database", level: 80 },
+
+    // Tools
+    "Git": { category: "tools", icon: "GitBranch", level: 90 },
+    "GitHub": { category: "tools", icon: "Github", level: 90 },
+    "npm": { category: "tools", icon: "Container", level: 85 },
+    "ESLint": { category: "tools", icon: "Terminal", level: 75 },
+    "Responsive Design": { category: "tools", icon: "Palette", level: 85 },
+    "Form Validation": { category: "tools", icon: "FileCode", level: 80 },
+    "Session Management": { category: "tools", icon: "Key", level: 80 },
+  };
+
+  const allSkills: Skill[] = [];
+  const addedSkills = new Set<string>(); // Track added skills to prevent duplicates
+
+  skillCategories.forEach(category => {
+    category.skills.forEach(skillName => {
+      const skillData = skillsMap[skillName];
+      // Only add if we have data for it and haven't added it yet
+      if (skillData && !addedSkills.has(skillName)) {
+        allSkills.push({
+          name: skillName,
+          level: skillData.level,
+          category: skillData.category,
+          icon: skillData.icon,
+        });
+        addedSkills.add(skillName);
+      }
+    });
+  });
+
+  return allSkills;
+};
+
+const skills: Skill[] = buildSkillsFromCategories();
+
+const categories = [
+  { id: "all", label: "All Skills", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
+  { id: "languages", label: "Languages", color: "bg-gradient-to-r from-blue-500 to-cyan-500" },
+  { id: "frontend", label: "Frontend", color: "bg-gradient-to-r from-green-500 to-emerald-500" },
+  { id: "backend", label: "Backend", color: "bg-gradient-to-r from-orange-500 to-yellow-500" },
+  { id: "database", label: "Database", color: "bg-gradient-to-r from-red-500 to-rose-500" },
+  { id: "tools", label: "Tools", color: "bg-gradient-to-r from-indigo-500 to-violet-500" },
+];
+
+// Icon mapping
+const iconMap: Record<string, any> = {
+  Code2,
+  Layers,
+  Database,
+  FileCode,
+  Palette,
+  Server,
+  GitBranch,
+  Github,
+  Container,
+  Flame,
+  Terminal,
+  Key,
+  Table,
+  Cpu,
+  Braces,
+};
+
+const SkillBar = ({ level }: { level: number }) => (
+  <div className="w-full h-3 bg-secondary/20 rounded-full overflow-hidden">
+    <motion.div
+      initial={{ width: 0 }}
+      whileInView={{ width: `${level}%` }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.5, delay: 0.2 }}
+      className={`h-full rounded-full ${
+        level > 75
+          ? "bg-gradient-to-r from-green-400 to-emerald-500"
+          : level > 50
+          ? "bg-gradient-to-r from-yellow-400 to-amber-500"
+          : "bg-gradient-to-r from-red-400 to-pink-500"
+      }`}
+    />
+  </div>
+);
+
+const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
+  const duplicatedSkills = [...skills, ...skills, ...skills];
+
   return (
-    <section id="skills" className="section-padding relative">
-      <div className="container-narrow">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
-
-          {/* Left Column: Sticky Header */}
-          <div className="w-full lg:w-1/3 lg:sticky lg:top-32 shrink-0">
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 glass-subtle p-6 glow-accent">
-              <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-start)/0.15)] blur-3xl" />
-              <div className="absolute -bottom-20 -left-16 h-40 w-40 rounded-full bg-[hsl(var(--gradient-mid)/0.12)] blur-3xl" />
-              <div className="absolute bottom-0 right-0 h-32 w-32 rounded-full bg-[hsl(var(--gradient-end)/0.1)] blur-3xl" />
-
-              <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
-                  Expertise
-                </div>
-                <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                  Technical <br className="hidden lg:block" />
-                  <span className="text-gradient">Stack</span>
-                </h2>
-                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed max-w-md">
-                  The technologies I reach for most often when building backend systems, full-stack products, gateways, production infrastructure, and AI-powered workflows.
-                </p>
-
-                <FlipSkill />
+    <div className="overflow-hidden py-8">
+      <motion.div
+        className="flex gap-8 mb-8"
+        animate={{ x: ["0%", "-33.33%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      >
+        {duplicatedSkills.map((skill, index) => {
+          const IconComponent = iconMap[skill.icon] || Code2;
+          return (
+            <div
+              key={`${skill.name}-${index}`}
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[100px]"
+            >
+              <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <IconComponent className="w-8 h-8 text-primary" />
               </div>
+              <span className="text-sm font-medium text-center">{skill.name}</span>
             </div>
+          );
+        })}
+      </motion.div>
+
+      <motion.div
+        className="flex gap-8"
+        animate={{ x: ["-33.33%", "0%"] }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+      >
+        {[...duplicatedSkills].reverse().map((skill, index) => {
+          const IconComponent = iconMap[skill.icon] || Code2;
+          return (
+            <div
+              key={`${skill.name}-reverse-${index}`}
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[100px]"
+            >
+              <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <IconComponent className="w-8 h-8 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-center">{skill.name}</span>
+            </div>
+          );
+        })}
+      </motion.div>
+    </div>
+  );
+};
+
+export const SkillsSection = () => {
+  const [activeCategory, setActiveCategory] = useState("all");
+  const filteredSkills = skills.filter(
+    (skill) => activeCategory === "all" || skill.category === activeCategory
+  );
+
+  return (
+    <section
+      id="skills"
+      className="py-16 px-4 bg-gradient-to-br from-background via-secondary/5 to-background"
+    >
+      <div className="container mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
+            ──── EXPERTISE
           </div>
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+            My{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Skills
+            </span>
+          </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Technologies I've mastered and my proficiency levels
+          </p>
+        </motion.div>
 
-          {/* Right Column: Spotlight Cards */}
-          <div className="lg:w-2/3 flex flex-col gap-6 w-full">
-            {skillCategories.map((cat) => {
-              const Icon = CATEGORY_ICONS[cat.title] ?? Wrench;
-              return (
-                <SpotlightCard key={cat.title} animateOnEnter={false} className="w-full">
-                  <div className="p-8 sm:p-10">
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-12 h-12 rounded-2xl glass-subtle border border-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500 group-hover:border-primary/30">
-                        <Icon className="w-5 h-5 text-primary group-hover:text-primary transition-colors duration-500" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors duration-300">{cat.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-1 font-mono">{cat.skills.length} technologies</p>
-                      </div>
-                    </div>
-
-                    <p className="mb-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                      {cat.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2.5">
-                      {cat.skills.map((skill, idx) => (
-                        <span
-                          key={skill}
-                          className="px-4 py-2 rounded-xl text-sm font-medium glass-subtle text-foreground/80 border border-white/5 hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent-secondary/5 hover:border-primary/40 hover:text-primary transition-all duration-300 select-none"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </SpotlightCard>
-              );
-            })}
-          </div>
-
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
+          {categories.map((category) => (
+            <motion.button
+              key={category.id}
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-6 py-2.5 rounded-full font-medium border border-transparent hover:shadow-lg transition-all ${
+                activeCategory === category.id
+                  ? `${category.color} text-white shadow-md`
+                  : "bg-secondary/50 text-foreground hover:bg-secondary/70"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {category.label}
+            </motion.button>
+          ))}
         </div>
+
+        {activeCategory === "all" ? (
+          <InfiniteScrollSkills skills={skills} />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence mode="popLayout">
+              {filteredSkills.map((skill) => {
+                const IconComponent = iconMap[skill.icon] || Code2;
+                return (
+                  <motion.div
+                    key={skill.name}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="bg-card p-6 rounded-2xl border border-border/30 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-lg group"
+                  >
+                    <div className="flex items-start gap-4 mb-5">
+                      <div className="w-12 h-12 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center">
+                        <IconComponent className="w-6 h-6 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                            {skill.name}
+                          </h3>
+                          <span
+                            className={`text-sm font-medium px-2 py-1 rounded-full ${
+                              skill.level > 75
+                                ? "bg-emerald-500/10 text-emerald-500"
+                                : skill.level > 50
+                                ? "bg-amber-500/10 text-amber-500"
+                                : "bg-pink-500/10 text-pink-500"
+                            }`}
+                          >
+                            {skill.level}%
+                          </span>
+                        </div>
+                        <SkillBar level={skill.level} />
+                        <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                          <span>Basic</span>
+                          <span>Advanced</span>
+                          <span>Expert</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
     </section>
   );

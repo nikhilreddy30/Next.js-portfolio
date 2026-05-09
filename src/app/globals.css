@@ -1,13 +1,10 @@
 @import "tailwindcss";
 @config "../../tailwind.config.ts";
-
-
 @layer base {
   /* Applied before JS to prevent white flash — matches .dark --background value */
   html {
     background-color: hsl(230, 35%, 7%);
   }
-
   :root {
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
@@ -40,7 +37,6 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 221 83% 53%;
   }
-
   .dark {
     --background: 222 47% 4%;
     --foreground: 210 40% 98%;
@@ -65,33 +61,27 @@
     --ring: 221 83% 53%;
   }
 }
-
 @layer base {
   * {
     @apply border-border;
   }
-
   html {
     position: relative;
     scroll-padding-top: calc(5rem + env(safe-area-inset-top));
   }
-
   body {
     position: relative;
     @apply bg-background text-foreground font-sans antialiased;
     overflow-wrap: break-word;
   }
 }
-
 /* Custom cursors */
 body {
   cursor: url("/icons8-select-cursor-18-light.png") 3 2, auto;
 }
-
 .dark body {
   cursor: url("/icons8-select-cursor-18-dark.png") 3 2, auto;
 }
-
 a,
 button,
 [role="button"],
@@ -100,7 +90,6 @@ input[type="button"],
 .cursor-pointer {
   cursor: url("/icons8-hand-cursor-18-light.png") 4 2, pointer;
 }
-
 .dark a,
 .dark button,
 .dark [role="button"],
@@ -109,7 +98,6 @@ input[type="button"],
 .dark .cursor-pointer {
   cursor: url("/icons8-hand-cursor-18-dark.png") 4 2, pointer;
 }
-
 input:not([type]),
 input[type="text"],
 input[type="email"],
@@ -123,7 +111,6 @@ textarea,
 .cursor-text {
   cursor: url("/icons8-text-cursor-19-light.png") 9 9, text;
 }
-
 .dark input:not([type]),
 .dark input[type="text"],
 .dark input[type="email"],
@@ -137,20 +124,16 @@ textarea,
 .dark .cursor-text {
   cursor: url("/icons8-text-cursor-19-dark.png") 9 9, text;
 }
-
 @layer utilities {
   .glass {
     @apply bg-white/9 dark:bg-white/[0.035] backdrop-blur-xl border border-white/18 dark:border-white/[0.08];
   }
-
   .glass-strong {
     @apply bg-white/16 dark:bg-white/[0.065] backdrop-blur-xl border border-white/24 dark:border-white/[0.11];
   }
-
   .glass-subtle {
     @apply bg-white/4 dark:bg-white/[0.02] backdrop-blur-md border border-white/8 dark:border-white/[0.05];
   }
-
   .text-gradient {
     @apply bg-gradient-to-r from-primary to-accent-light bg-clip-text text-transparent;
   }
@@ -158,40 +141,32 @@ textarea,
   .glow-accent {
     box-shadow: 0 0 30px hsla(221, 83%, 53%, 0.15);
   }
-
   .glow-primary {
     box-shadow: 0 0 40px hsla(221, 83%, 53%, 0.2);
   }
-
   .section-padding {
     @apply py-20 md:py-28 lg:py-32;
   }
-
   .container-narrow {
     @apply max-w-6xl mx-auto px-5 sm:px-6 lg:px-8;
   }
-
   @media (min-width: 1536px) {
     .container-narrow {
       max-width: 88rem;
     }
   }
-
   .mask-x-fade {
     mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   }
-
   .mask-y-fade {
     mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
   }
 }
-
 .perspective {
   perspective: 1000px;
 }
-
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -206,7 +181,6 @@ textarea,
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary) / 0.5);
 }
-
 /* Selection */
 ::selection {
   background: hsl(var(--accent) / 0.3);

@@ -8,7 +8,6 @@ import SkillsSection from "@/components/SkillsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import CertificationsSection from "@/components/CertificationsSection";
 import ExperienceSection from "@/components/ExperienceSection";
-import AITwinSection from "@/components/AITwinSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -31,11 +30,9 @@ export default function Home() {
         <ProjectsSection />
         <CertificationsSection />
         <ExperienceSection />
-        <AITwinSection />
         <ContactSection />
       </main>
       <Footer />
-      <AITwinChat />
     </>
   );
 }

@@ -140,9 +140,13 @@ const ContactSection = () => {
           <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
             Connect
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-            Get in <span className="text-gradient">Touch</span>
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+            Get{" "} in{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Touch
+            </span>
           </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
           <p className="text-muted-foreground max-w-xl mx-auto text-base leading-relaxed">
             Open to backend, full-stack, platform, AI security, observability, and GenAI product engineering opportunities, as well as thoughtful collaborations.
           </p>
