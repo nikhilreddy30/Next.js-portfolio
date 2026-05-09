@@ -189,14 +189,23 @@ export const CertificationsSection = () => {
       <div className="max-w-6xl mx-auto">
 
         {/* HEADER */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold mb-3">
-            Certifications
+	      <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+            My{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Certifications
+            </span>
           </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
           <p className="text-slate-400">
             Verified credentials across cloud, development, and AI
           </p>
-        </div>
+        </motion.div>
 
         {/* FILTER */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
