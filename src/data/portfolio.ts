@@ -75,35 +75,201 @@ export interface Certification {
   title: string;
   issuer: string;
   date: string;
+  description: string;
+  category: "Programming" | "Database" | "Cloud" | "DevOps" | "AI/ML" | "Professional";
   credentialId?: string;
   credentialUrl?: string;
-  description: string;
 }
 
 export const certifications: Certification[] = [
+  // ⭐ ORACLE PROFESSIONAL
   {
-    title: "Oracle Certified in Java Foundation",
+    title: "Oracle Cloud Infrastructure 2025 Certified DevOps Professional",
     issuer: "Oracle",
-    date: "2024",
-    description: "Demonstrates foundational knowledge of Java programming language, object-oriented concepts, and core Java features.",
-  },
-  {
-    title: "IBM Certified in SQL and Relational Databases 101",
-    issuer: "IBM",
-    date: "2024",
-    description: "Validates proficiency in SQL query writing, database design, and working with relational database management systems.",
+    date: "2025",
+    category: "DevOps",
+    credentialId: "102219890OCI25DOPOCP",
+    credentialUrl: "#",
+    description:
+      "Advanced certification in DevOps practices on Oracle Cloud Infrastructure including CI/CD and automation.",
   },
   {
     title: "Oracle Cloud Database Services 2025 Certified Professional",
     issuer: "Oracle",
     date: "2025",
-    description: "Certifies expertise in Oracle Cloud infrastructure, database services, and cloud deployment practices.",
+    category: "Cloud",
+    credentialId: "102219890ODBCS25CP",
+    credentialUrl: "#",
+    description:
+      "Professional certification validating expertise in Oracle Cloud database services.",
+  },
+
+  // ☁️ AWS CLOUD
+  {
+    title: "AWS Academy Graduate - Cloud Architecting",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/GZui3Bx9",
+    description: "Designing scalable cloud architectures using AWS.",
   },
   {
-    title: "Database Fundamentals",
-    issuer: "Microsoft",
+    title: "AWS Academy Graduate - Cloud Developing",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/J7EPdujB",
+    description: "Building and deploying applications on AWS.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Foundations",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/avJjxig2",
+    description: "Core AWS cloud concepts and services.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Operations",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/wQPXTizH",
+    description: "Managing and monitoring AWS infrastructure.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Security Foundations",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/hw1g7pxs",
+    description: "AWS security and IAM practices.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Web Application Builder",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Cloud",
+    credentialUrl: "https://www.credly.com/go/2xxIEy4h",
+    description: "Building cloud-native web apps.",
+  },
+
+  // ⚙️ DEVOPS
+  {
+    title: "AWS Academy Graduate - Microservices and CI/CD Pipeline Builder",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "DevOps",
+    credentialUrl: "https://www.credly.com/go/SsrWMnUX",
+    description: "CI/CD pipelines and microservices architecture.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Security Builder",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "DevOps",
+    credentialUrl: "https://www.credly.com/go/fLgV5DVU",
+    description: "Secure cloud architecture and access control.",
+  },
+  {
+    title: "AWS Academy Graduate - Data Center Technician",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Professional",
+    credentialUrl: "https://www.credly.com/go/SbuY6k78",
+    description: "Infrastructure and data center operations.",
+  },
+
+  // 📊 DATA + AI
+  {
+    title: "AWS Academy Graduate - Data Engineering",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Database",
+    credentialUrl: "https://www.credly.com/go/D6Cdnd7p",
+    description: "Data pipelines and large-scale processing.",
+  },
+  {
+    title: "AWS Academy Graduate - Cloud Data Pipeline Builder",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "Database",
+    credentialUrl: "https://www.credly.com/go/PdAFR6rd",
+    description: "ETL workflows and data pipelines.",
+  },
+  {
+    title: "AWS Academy Graduate - Machine Learning Foundations",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "AI/ML",
+    credentialUrl: "https://www.credly.com/go/m1Ghz30E",
+    description: "ML fundamentals and model building.",
+  },
+  {
+    title: "AWS Academy Graduate - Machine Learning for NLP",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "AI/ML",
+    credentialUrl: "https://www.credly.com/go/JASHEnEH",
+    description: "NLP and text-based ML models.",
+  },
+  {
+    title: "AWS Academy Graduate - Generative AI Foundations",
+    issuer: "AWS Academy",
+    date: "2025",
+    category: "AI/ML",
+    credentialUrl: "https://www.credly.com/badges/34133cba-c474-4c53-a85a-07a514125dfc",
+    description: "Generative AI and LLM concepts.",
+  },
+
+  // 💻 PROGRAMMING
+  {
+    title: "Oracle Certified in Java Foundation",
+    issuer: "Oracle",
     date: "2024",
-    description: "Comprehensive understanding of database concepts, SQL operations, and data management principles.",
+    category: "Programming",
+    description: "Core Java and OOP concepts.",
+  },
+  {
+    title: "Java Fundamentals",
+    issuer: "Oracle Academy",
+    date: "2024",
+    category: "Programming",
+    description: "Java syntax and programming basics.",
+  },
+  {
+    title: "Java SE 21 Developer (1Z0-830) Preparation",
+    issuer: "Udemy",
+    date: "2025",
+    category: "Programming",
+    description: "Advanced Java and certification prep.",
+  },
+
+  // 🗄 DATABASE
+  {
+    title: "SQL and Relational Databases 101",
+    issuer: "IBM",
+    date: "2025",
+    category: "Database",
+    credentialUrl: "https://courses.cognitiveclass.ai/certificates/ff30123191f54bd7aae8aec022b5b148",
+    description: "SQL queries and relational DB design.",
+  },
+
+  // 🐍 PYTHON
+  {
+    title: "Python 101 for Data Science",
+    issuer: "IBM",
+    date: "2025",
+    category: "Programming",
+    description: "Python basics for data science.",
+  },
+  {
+    title: "Python for Data Analysis",
+    issuer: "Great Learning",
+    date: "2024",
+    category: "Programming",
+    credentialUrl: "https://verify.mygreatlearning.com/YGZHQWNE",
+    description: "Data analysis using Python.",
   },
 ];
 
