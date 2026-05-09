@@ -204,11 +204,15 @@ export const SkillsSection = () => {
           className="text-center mb-12"
         >
           <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
-            --EXPERTISE
+            ──── EXPERTISE
           </div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-            My <span className="text-gradient">Skills</span>
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+            My{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Skills
+            </span>
           </h2>
+          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
             Technologies I've mastered and my proficiency levels
           </p>
