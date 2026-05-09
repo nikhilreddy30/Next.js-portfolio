@@ -137,6 +137,7 @@ textarea,
   .text-gradient {
     @apply bg-gradient-to-r from-primary to-accent-light bg-clip-text text-transparent;
   }
+
   .glow-accent {
     box-shadow: 0 0 30px hsla(221, 83%, 53%, 0.15);
   }
