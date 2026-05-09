@@ -195,6 +195,9 @@ export const CertificationsSection = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
+		  <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
+            ──── ACHIEVEMENTS
+          </div>	  
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
             My{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
