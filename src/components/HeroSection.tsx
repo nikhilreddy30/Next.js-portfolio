@@ -96,8 +96,6 @@ const HeroSection = () => {
       <div className="absolute top-1/2 left-1/3 w-[400px] h-[400px] rounded-full animate-[pulse_12s_ease-in-out_infinite] motion-reduce:animate-none opacity-30 pointer-events-none bg-[radial-gradient(circle,hsl(var(--gradient-end)/0.15)_0%,transparent_60%)]" />
       
       {/* Smooth fade into the next section */}
-      <div className="absolute bottom-0 inset-x-0 h-32 sm:h-64 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-0" />
-
         <div className="container-narrow relative z-10 w-full h-full flex items-center justify-center">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
             
