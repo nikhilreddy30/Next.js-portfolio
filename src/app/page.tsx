@@ -1,3 +1,5 @@
+'use client';
+
 import dynamic from "next/dynamic";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -12,10 +14,14 @@ import Footer from "@/components/Footer";
 
 const FluidCursor = dynamic(() => import("@/components/FluidCursor"));
 const AITwinChat = dynamic(() => import("@/components/AITwinChat"));
+const ParticleNetwork = dynamic(() => import("@/components/ParticleNetwork"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (
     <>
+      <ParticleNetwork />
       <FluidCursor />
       <Navbar />
       <main id="main-content" tabIndex={-1}>
