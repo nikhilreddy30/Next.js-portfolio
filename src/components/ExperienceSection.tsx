@@ -312,7 +312,7 @@ const ExperienceSection = () => {
                     <span className="text-gradient">Education</span>
                   </h2>
                   <p className="max-w-md leading-relaxed text-muted-foreground">
-                    I’ve grown from building public-sector software into shipping backend systems, full-stack platform features, gateways, observability, and AI products where reliability, delivery speed, retrieval quality, and usability all have to work together.
+                    Strong academic background in Computer Science with consistent performance and focus on technology, problem solving, and software development
                   </p>
 
                   <div className="hidden lg:block">
