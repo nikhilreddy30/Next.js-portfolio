@@ -136,47 +136,71 @@ const SkillBar = ({ level }: { level: number }) => (
 );
 
 const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
-  const duplicatedSkills = [...skills, ...skills, ...skills];
+  const duplicatedSkills = [
+    ...skills,
+    ...skills,
+    ...skills,
+    ...skills,
+    ...skills,
+  ];
 
   return (
-    <div className="overflow-hidden py-8">
+    <div className="w-full overflow-hidden py-10">
+      {/* Top Row */}
       <motion.div
-        className="flex gap-8 mb-8"
-        animate={{ x: ["0%", "-33.33%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        className="flex min-w-max gap-12 mb-10"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{
+          duration: 80,
+          repeat: Infinity,
+          ease: "linear",
+        }}
       >
         {duplicatedSkills.map((skill, index) => {
           const IconComponent = iconMap[skill.icon] || Code2;
+
           return (
             <div
               key={`${skill.name}-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[100px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[120px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
               </div>
-              <span className="text-sm font-medium text-center">{skill.name}</span>
+
+              <span className="text-sm font-medium text-center whitespace-nowrap">
+                {skill.name}
+              </span>
             </div>
           );
         })}
       </motion.div>
 
+      {/* Bottom Row */}
       <motion.div
-        className="flex gap-8"
-        animate={{ x: ["-33.33%", "0%"] }}
-        transition={{ duration: 70, repeat: Infinity, ease: "linear" }}
+        className="flex min-w-max gap-12"
+        animate={{ x: ["-50%", "0%"] }}
+        transition={{
+          duration: 80,
+          repeat: Infinity,
+          ease: "linear",
+        }}
       >
         {[...duplicatedSkills].reverse().map((skill, index) => {
           const IconComponent = iconMap[skill.icon] || Code2;
+
           return (
             <div
               key={`${skill.name}-reverse-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[100px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[120px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
               </div>
-              <span className="text-sm font-medium text-center">{skill.name}</span>
+
+              <span className="text-sm font-medium text-center whitespace-nowrap">
+                {skill.name}
+              </span>
             </div>
           );
         })}
@@ -196,7 +220,7 @@ export const SkillsSection = () => {
       id="skills"
       className="py-16 px-4 bg-gradient-to-br from-background via-secondary/5 to-background"
     >
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
