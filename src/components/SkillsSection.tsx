@@ -164,7 +164,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
       <motion.div
         className="flex gap-8"
         animate={{ x: ["-33.33%", "0%"] }}
-        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 70, repeat: Infinity, ease: "linear" }}
       >
         {[...duplicatedSkills].reverse().map((skill, index) => {
           const IconComponent = iconMap[skill.icon] || Code2;
