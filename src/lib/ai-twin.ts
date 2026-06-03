@@ -1,4 +1,4 @@
-import { about, experiences, personalInfo, projects, skillCategories, stats } from "@/data/portfolio";
+import { about, experiences, personalInfo, projects, skills, stats } from "@/data/portfolio";
 
 export const CHAT_MEMORY_WINDOW = 10;
 export const CHAT_STORAGE_KEY = "nikunj-ai-twin-chat";
