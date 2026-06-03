@@ -9,8 +9,8 @@ Built with **Next.js 16**, this portfolio combines a polished interactive experi
 ## ✨ Portfolio Features
 
 ### 🎯 Hero Section
-- **Personal Introduction**: Yalaka Nikhil Reddy - Full-Stack Web Developer & CSE Student
-- **Live Stats**: 3+ Projects, 4+ Certifications, 8.5 CGPA, 10/10 GPA
+- **Personal Introduction**: Yalaka Nikhil Reddy - Full-Stack Developer
+- **Live Stats**: 3+ Projects, 18+ Certifications, 8.5 CGPA, 10/10 GPA
 - **Call-to-Actions**: View Projects, Resume Download, AI Twin Chat
 - **Responsive Design**: Optimized for mobile, tablet, and desktop
 - **Professional Tagline**: "Computer Science Engineering student with hands-on experience in web application development"
@@ -159,7 +159,7 @@ Create a `.env.local` file in the root:
 ```bash
 # Contact Form (Resend)
 RESEND_API_KEY=your_resend_api_key
-CONTACT_EMAIL_FROM="Yalaka Nikhil Reddy <contact@yalakanikhilreddy.dev>"
+CONTACT_EMAIL_FROM="Yalaka Nikhil Reddy <contact@yalakanikhilreddy.vercel.app>"
 CONTACT_EMAIL_TO=yalakanikhilreddy@gmail.com
 
 # AI Twin Chat
@@ -308,7 +308,7 @@ MIT License - Feel free to use this portfolio template
   Made with passion, TypeScript & Next.js ⚡
   <br>
   <br>
-  <a href="https://yalakanikhilreddy.dev">Visit Portfolio</a> • 
+  <a href="https://yalakanikhilreddy.vercel.app">Visit Portfolio</a> • 
   <a href="https://github.com/YNikhil188">GitHub</a> • 
   <a href="https://linkedin.com/in/yalaka-nikhil-reddy">LinkedIn</a>
 </div>xt-awaret-aware responses regarding professional background, skills, and projects.
@@ -362,9 +362,9 @@ Create a `.env.local` to securely store keys for the AI Chatbot and Resend-backe
 # Example environment variables 
 # -----------------------------
 # Contact / Resend
-RESEND_API_KEY=re_your_resend_api_key
-CONTACT_EMAIL_FROM="Nikunj Portfolio <contact@portfolio.codenex.dev>"
-CONTACT_EMAIL_TO=njkhitha2003@gmail.com,info.portfolio.nikunj@gmail.com
+RESEND_API_KEY=your_resend_api_key
+CONTACT_EMAIL_FROM="Yalaka Nikhil Reddy <contact@yalakanikhilreddy.vercel.app>"
+CONTACT_EMAIL_TO=yalakanikhilreddy@gmail.com
 
 # -----------------------------
 # LLM / AI Provider
