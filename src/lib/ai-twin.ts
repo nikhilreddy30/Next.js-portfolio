@@ -110,8 +110,11 @@ const projectContext = projects
   )
   .join("\n");
 
-const skillContext = skillCategories
-  .map((category) => `- ${category.title}: ${category.skills.join(", ")}`)
+const skillContext = skills
+  .map(
+    (skill) =>
+      `- ${skill.name} (${skill.category}, ${skill.level}%)`
+  )
   .join("\n");
 
 export const PORTFOLIO_CONTEXT = `
