@@ -148,7 +148,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
     <div className="w-full overflow-hidden py-10">
       {/* Top Row */}
       <motion.div
-        className="flex min-w-max gap-12 mb-10"
+        className="flex min-w-max gap-2 mb-10"
         animate={{ x: ["0%", "-50%"] }}
         transition={{
           duration: 80,
@@ -162,7 +162,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
           return (
             <div
               key={`${skill.name}-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[120px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 w-[80px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
@@ -178,7 +178,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
 
       {/* Bottom Row */}
       <motion.div
-        className="flex min-w-max gap-12"
+        className="flex min-w-max gap-2"
         animate={{ x: ["-50%", "0%"] }}
         transition={{
           duration: 80,
@@ -192,7 +192,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
           return (
             <div
               key={`${skill.name}-reverse-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[120px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 w-[80px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
@@ -218,9 +218,9 @@ export const SkillsSection = () => {
   return (
     <section
       id="skills"
-      className="py-16 px-4 bg-gradient-to-br from-background via-secondary/5 to-background"
+      className="py-16 px-0 bg-gradient-to-br from-background via-secondary/5 to-background"
     >
-      <div className="container mx-auto max-w-7xl">
+      <div className="w-full max-w-none">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
