@@ -356,43 +356,43 @@ export const projects: Project[] = [
   },
 ];
 
-export const skillCategories = [
-  {
-    title: "Programming Languages",
-    description: "Core programming languages for backend and general-purpose development.",
-    skills: ["Java", "Python", "JavaScript", "PHP"],
-  },
-  {
-    title: "Frontend Technologies",
-    description: "Web technologies and frameworks for building responsive user interfaces.",
-    skills: ["HTML5", "CSS3", "JavaScript", "React", "Tailwind CSS"],
-  },
-  {
-    title: "Backend & Frameworks",
-    description: "Server-side technologies and frameworks for API development and backend systems.",
-    skills: ["Node.js", "Express.js", "PHP", "REST APIs", "JWT"],
-  },
-  {
-    title: "Databases & Storage",
-    description: "Database technologies for data management and persistence.",
-    skills: ["MySQL", "MongoDB", "Database Design"],
-  },
-  {
-    title: "Developer Tools & Practices",
-    description: "Version control, tools, and best practices for professional development.",
-    skills: ["Git", "GitHub", "npm", "ESLint", "Responsive Design", "Form Validation", "Session Management"],
-  },
-  {
-    title: "Soft Skills",
-    description: "Professional competencies and approach to problem-solving.",
-    skills: ["Critical Thinking", "Data-Driven Decision Making", "Project Ownership", "Problem Solving", "Team Collaboration"],
-  },
-];
+export interface Skill {
+  name: string;
+  category: "languages" | "frontend" | "backend" | "database" | "tools";
+  level: number;
+  icon: string;
+}
 
-export const chatSuggestions = [
-  "Tell me about BugCrew - your bug tracking system",
-  "What technologies did you use in Xceltics?",
-  "How did you build the CarRento platform?",
-  "What certifications do you have?",
-  "What are your key skills as a developer?",
+export const skills: Skill[] = [
+  // Languages
+  { name: "Java", category: "languages", level: 85, icon: "Code2" },
+  { name: "Python", category: "languages", level: 75, icon: "Code2" },
+  { name: "JavaScript", category: "languages", level: 90, icon: "FileCode" },
+  { name: "PHP", category: "languages", level: 70, icon: "Server" },
+
+  // Frontend
+  { name: "HTML5", category: "frontend", level: 95, icon: "FileCode" },
+  { name: "CSS3", category: "frontend", level: 90, icon: "Palette" },
+  { name: "React", category: "frontend", level: 90, icon: "Layers" },
+  { name: "Tailwind CSS", category: "frontend", level: 85, icon: "Palette" },
+
+  // Backend
+  { name: "Node.js", category: "backend", level: 90, icon: "Server" },
+  { name: "Express.js", category: "backend", level: 85, icon: "Server" },
+  { name: "REST APIs", category: "backend", level: 85, icon: "Braces" },
+  { name: "JWT", category: "backend", level: 80, icon: "Key" },
+
+  // Database
+  { name: "MySQL", category: "database", level: 85, icon: "Database" },
+  { name: "MongoDB", category: "database", level: 90, icon: "Database" },
+  { name: "Database Design", category: "database", level: 80, icon: "Database" },
+
+  // Tools
+  { name: "Git", category: "tools", level: 90, icon: "GitBranch" },
+  { name: "GitHub", category: "tools", level: 90, icon: "Github" },
+  { name: "npm", category: "tools", level: 85, icon: "Container" },
+  { name: "ESLint", category: "tools", level: 75, icon: "Terminal" },
+  { name: "Responsive Design", category: "tools", level: 85, icon: "Palette" },
+  { name: "Form Validation", category: "tools", level: 80, icon: "FileCode" },
+  { name: "Session Management", category: "tools", level: 80, icon: "Key" },
 ];
