@@ -89,7 +89,7 @@ export const certifications: Certification[] = [
     date: "2025",
     category: "DevOps",
     credentialId: "102219890OCI25DOPOCP",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
+    credentialUrl: "https://drive.google.com/file/d/1XzqXlFO6mmizlGdgqMYRdWQq9yuj-yd2/view?usp=drive_link",
     description:
       "Advanced certification in DevOps practices on Oracle Cloud Infrastructure including CI/CD and automation.",
   },
@@ -99,7 +99,7 @@ export const certifications: Certification[] = [
     date: "2025",
     category: "Cloud",
     credentialId: "102219890ODBCS25CP",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
+    credentialUrl: "https://drive.google.com/file/d/1g9BZbh1EvzYZ80mzuKZKIaSZUYclFv2e/view?usp=drive_link",
     description:
       "Professional certification validating expertise in Oracle Cloud database services.",
   },
@@ -228,7 +228,7 @@ export const certifications: Certification[] = [
     issuer: "Oracle",
     date: "2024",
     category: "Programming",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",    
+    credentialUrl: "https://drive.google.com/file/d/1Xk4xqIUpsraPkMebKzl3qlzkEh6X8JSr/view?usp=drive_link",    
     description: "Core Java and OOP concepts.",
   },
   {
@@ -236,7 +236,7 @@ export const certifications: Certification[] = [
     issuer: "Oracle Academy",
     date: "2024",
     category: "Programming",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",    
+    credentialUrl: "https://drive.google.com/file/d/1XhUz7tlIwwuoeZnMiZgM_ngeFfSYVCOx/view?usp=drive_link",    
     description: "Java syntax and programming basics.",
   },
   {
@@ -244,7 +244,7 @@ export const certifications: Certification[] = [
     issuer: "Udemy",
     date: "2025",
     category: "Programming",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
+    credentialUrl: "https://drive.google.com/file/d/1-vImoEA3ZjLYUN4IkvF7JFEPJ5wC1z1m/view?usp=sharing",
     description: "Advanced Java and certification prep.",
   },
 
@@ -264,7 +264,7 @@ export const certifications: Certification[] = [
     issuer: "IBM",
     date: "2025",
     category: "Programming",
-    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
+    credentialUrl: "https://drive.google.com/file/d/188oU_4N75ZoP16Q5_EIVvDp77hHcHADr/view?usp=drive_link",
     description: "Python basics for data science.",
   },
   {
