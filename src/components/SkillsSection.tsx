@@ -19,51 +19,8 @@ import {
   Cpu,
   Braces,
 } from "lucide-react";
-import { skillCategories } from "@/data/portfolio";
-
-// Skill type definition
-type Skill = {
-  name: string;
-  level: number;
-  category: string;
-  icon: string;
-};
-
-// Build skills array from portfolio data
-const buildSkillsFromCategories = (): Skill[] => {
-  const skillsMap: Record<string, { category: string; icon: string; level: number }> = {
-    // Programming Languages
-    "Java": { category: "languages", icon: "Code2", level: 85 },
-    "Python": { category: "languages", icon: "Code2", level: 75 },
-    "JavaScript": { category: "languages", icon: "FileCode", level: 90 },
-    "PHP": { category: "languages", icon: "Server", level: 70 },
-
-    // Frontend
-    "HTML5": { category: "frontend", icon: "FileCode", level: 95 },
-    "CSS3": { category: "frontend", icon: "Palette", level: 90 },
-    "React": { category: "frontend", icon: "Layers", level: 90 },
-    "Tailwind CSS": { category: "frontend", icon: "Palette", level: 85 },
-
-    // Backend
-    "Node.js": { category: "backend", icon: "Server", level: 90 },
-    "Express.js": { category: "backend", icon: "Server", level: 85 },
-    "REST APIs": { category: "backend", icon: "Braces", level: 85 },
-    "JWT": { category: "backend", icon: "Key", level: 80 },
-
-    // Database
-    "MySQL": { category: "database", icon: "Database", level: 85 },
-    "MongoDB": { category: "database", icon: "Database", level: 90 },
-    "Database Design": { category: "database", icon: "Database", level: 80 },
-
-    // Tools
-    "Git": { category: "tools", icon: "GitBranch", level: 90 },
-    "GitHub": { category: "tools", icon: "Github", level: 90 },
-    "npm": { category: "tools", icon: "Container", level: 85 },
-    "ESLint": { category: "tools", icon: "Terminal", level: 75 },
-    "Responsive Design": { category: "tools", icon: "Palette", level: 85 },
-    "Form Validation": { category: "tools", icon: "FileCode", level: 80 },
-    "Session Management": { category: "tools", icon: "Key", level: 80 },
-  };
+import type { Skill } from "@/data/portfolio";
+import { skills } from "@/data/portfolio";
 
   const allSkills: Skill[] = [];
   const addedSkills = new Set<string>(); // Track added skills to prevent duplicates
