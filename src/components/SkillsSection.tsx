@@ -162,7 +162,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
           return (
             <div
               key={`${skill.name}-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 w-[80px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
@@ -192,7 +192,7 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
           return (
             <div
               key={`${skill.name}-reverse-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 w-[80px]"
+              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]"
             >
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
