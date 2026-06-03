@@ -1,6 +1,6 @@
 export const personalInfo = {
   name: "Yalaka Nikhil Reddy",
-  role: "Full-Stack Developer & Computer Science Student",
+  role: "Full-Stack Developer",
   tagline: "Computer Science Engineering student with hands-on experience in web application development. Proficient in Java, Python, and modern web technologies, with practical exposure to MERN and PHP–MySQL applications.",
   focus: "Open to full-stack development, web application, and software engineering roles where I can apply my MERN stack expertise and contribute to meaningful projects.",
   email: "yalakanikhil30@gmail.com",
@@ -89,7 +89,7 @@ export const certifications: Certification[] = [
     date: "2025",
     category: "DevOps",
     credentialId: "102219890OCI25DOPOCP",
-    credentialUrl: "#",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
     description:
       "Advanced certification in DevOps practices on Oracle Cloud Infrastructure including CI/CD and automation.",
   },
@@ -99,7 +99,7 @@ export const certifications: Certification[] = [
     date: "2025",
     category: "Cloud",
     credentialId: "102219890ODBCS25CP",
-    credentialUrl: "#",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
     description:
       "Professional certification validating expertise in Oracle Cloud database services.",
   },
@@ -228,6 +228,7 @@ export const certifications: Certification[] = [
     issuer: "Oracle",
     date: "2024",
     category: "Programming",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",    
     description: "Core Java and OOP concepts.",
   },
   {
@@ -235,6 +236,7 @@ export const certifications: Certification[] = [
     issuer: "Oracle Academy",
     date: "2024",
     category: "Programming",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",    
     description: "Java syntax and programming basics.",
   },
   {
@@ -242,6 +244,7 @@ export const certifications: Certification[] = [
     issuer: "Udemy",
     date: "2025",
     category: "Programming",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
     description: "Advanced Java and certification prep.",
   },
 
@@ -261,6 +264,7 @@ export const certifications: Certification[] = [
     issuer: "IBM",
     date: "2025",
     category: "Programming",
+    credentialUrl: "https://drive.google.com/drive/u/0/folders/1SjJZivP85xjr7GMu08thk34RtFI4c6p9",
     description: "Python basics for data science.",
   },
   {
