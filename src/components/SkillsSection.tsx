@@ -22,30 +22,6 @@ import {
 import type { Skill } from "@/data/portfolio";
 import { skills } from "@/data/portfolio";
 
-  const allSkills: Skill[] = [];
-  const addedSkills = new Set<string>(); // Track added skills to prevent duplicates
-
-  skillCategories.forEach(category => {
-    category.skills.forEach(skillName => {
-      const skillData = skillsMap[skillName];
-      // Only add if we have data for it and haven't added it yet
-      if (skillData && !addedSkills.has(skillName)) {
-        allSkills.push({
-          name: skillName,
-          level: skillData.level,
-          category: skillData.category,
-          icon: skillData.icon,
-        });
-        addedSkills.add(skillName);
-      }
-    });
-  });
-
-  return allSkills;
-};
-
-const skills: Skill[] = buildSkillsFromCategories();
-
 const categories = [
   { id: "all", label: "All Skills", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
   { id: "languages", label: "Languages", color: "bg-gradient-to-r from-blue-500 to-cyan-500" },
