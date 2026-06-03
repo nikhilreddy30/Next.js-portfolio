@@ -67,7 +67,7 @@ const AboutSection = () => {
             </h3>
 
             {/* About Text */}
-            <div className="text-gray-300 leading-relaxed space-y-4 text-lg">
+            <div className="text-gray-300 leading-relaxed space-y-4 text-lg text-justify max-w-3xl">
               <p>
                 <span className="text-cyan-400 font-semibold">
                   Computer Science Engineering student
