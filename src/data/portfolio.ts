@@ -396,3 +396,11 @@ export const skills: Skill[] = [
   { name: "Form Validation", category: "tools", level: 80, icon: "FileCode" },
   { name: "Session Management", category: "tools", level: 80, icon: "Key" },
 ];
+
+export const chatSuggestions = [
+  "Tell me about BugCrew - your bug tracking system",
+  "What technologies did you use in Xceltics?",
+  "How did you build the CarRento platform?",
+  "What certifications do you have?",
+  "What are your key skills as a developer?",
+];
