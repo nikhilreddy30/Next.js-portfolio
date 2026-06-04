@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Code2,
@@ -142,6 +142,165 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
   );
 };
 
+const GitHubInsights = () => {
+  const [info, setInfo] = useState<any>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Replace with your GitHub username
+    const username = "your-github-username";
+    
+    fetch(`https://api.github.com/users/${username}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setInfo(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching GitHub data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="mt-16"
+    >
+      <div className="text-center mb-8">
+        <h3 className="text-3xl font-bold mb-2">
+          GitHub{" "}
+          <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+            Activity
+          </span>
+        </h3>
+        <p className="text-muted-foreground">My coding journey on GitHub</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto px-4">
+        {/* Profile Details Card */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
+        >
+          <div className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-border/30">
+            <h4 className="font-semibold text-lg flex items-center gap-2">
+              <Github className="w-5 h-5" />
+              Profile Overview
+            </h4>
+          </div>
+          <div className="p-4 flex items-center justify-center bg-background">
+            <img
+              src={`https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=your-github-username&theme=algolia`}
+              alt="GitHub Profile Details"
+              className="max-w-full h-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        </motion.div>
+
+        {/* Languages Card */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
+        >
+          <div className="p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-b border-border/30">
+            <h4 className="font-semibold text-lg flex items-center gap-2">
+              <Code2 className="w-5 h-5" />
+              Top Languages
+            </h4>
+          </div>
+          <div className="p-4 flex items-center justify-center bg-background">
+            <img
+              src={`https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=your-github-username&theme=algolia`}
+              alt="Top Languages"
+              className="max-w-full h-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        </motion.div>
+
+        {/* Stats Card */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
+        >
+          <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-b border-border/30">
+            <h4 className="font-semibold text-lg flex items-center gap-2">
+              <GitBranch className="w-5 h-5" />
+              GitHub Stats
+            </h4>
+          </div>
+          <div className="p-4 flex items-center justify-center bg-background">
+            <img
+              src={`https://github-profile-summary-cards.vercel.app/api/cards/stats?username=your-github-username&theme=algolia`}
+              alt="GitHub Stats"
+              className="max-w-full h-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        </motion.div>
+
+        {/* Most Used Languages Card */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
+        >
+          <div className="p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border-b border-border/30">
+            <h4 className="font-semibold text-lg flex items-center gap-2">
+              <Terminal className="w-5 h-5" />
+              Most Productive Time
+            </h4>
+          </div>
+          <div className="p-4 flex items-center justify-center bg-background">
+            <img
+              src={`https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=your-github-username&theme=algolia`}
+              alt="Most Commit Language"
+              className="max-w-full h-auto object-contain"
+              loading="lazy"
+            />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* GitHub Contribution Graph */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-12 max-w-6xl mx-auto px-4"
+      >
+        <div className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden">
+          <div className="p-4 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border-b border-border/30">
+            <h4 className="font-semibold text-lg flex items-center gap-2">
+              <Flame className="w-5 h-5" />
+              Contribution Activity
+            </h4>
+          </div>
+          <div className="p-6 flex items-center justify-center bg-background">
+            <img
+              src={`https://ghchart.rshah.org/your-github-username`}
+              alt="GitHub Contribution Chart"
+              className="max-w-full h-auto"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 export const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const filteredSkills = skills.filter(
@@ -196,7 +355,7 @@ export const SkillsSection = () => {
         {activeCategory === "all" ? (
           <InfiniteScrollSkills skills={skills} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-7xl mx-auto">
             <AnimatePresence mode="popLayout">
               {filteredSkills.map((skill) => {
                 const IconComponent = iconMap[skill.icon] || Code2;
@@ -244,6 +403,9 @@ export const SkillsSection = () => {
             </AnimatePresence>
           </div>
         )}
+
+        {/* GitHub Insights Section */}
+        <GitHubInsights />
       </div>
     </section>
   );
