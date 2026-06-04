@@ -94,9 +94,14 @@ const certifications: CertificationUI[] = portfolioCertifications.map(
 );
 
 /* ================= CARD ================= */
-const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
+const CertificationCard = ({ cert, isAll, index }: { cert: CertificationUI; isAll: boolean; index: number }) => {
   return (
     <motion.div
+      // Animate from right (x: 50) to original position (x: 0) only when "all" is active
+      initial={isAll ? { opacity: 0, x: 50 } : false}
+      animate={isAll ? { opacity: 1, x: 0 } : false}
+      // Stagger the animation based on the card's index for a cascading effect
+      transition={isAll ? { duration: 0.5, delay: index * 0.1, ease: "easeOut" } : {}}
       whileHover={{ y: -10, scale: 1.02 }}
       className="group relative"
     >
@@ -229,8 +234,13 @@ export const CertificationsSection = () => {
 
         {/* GRID */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((cert) => (
-            <CertificationCard key={cert.id} cert={cert} />
+          {filtered.map((cert, index) => (
+            <CertificationCard 
+              key={cert.id} 
+              cert={cert} 
+              isAll={activeFilter === "all"} 
+              index={index} 
+            />
           ))}
         </div>
 
