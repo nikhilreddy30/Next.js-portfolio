@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Code2,
@@ -19,9 +19,27 @@ import {
   Cpu,
   Braces,
 } from "lucide-react";
+
+// --- IMPORTS (Adjust paths if necessary) ---
 import type { Skill } from "@/data/portfolio";
 import { skills } from "@/data/portfolio";
+import { techStack } from "@/constants/techStack";
+import Tooltip from "../ui/tooltip/Tooltip"; // Adjust path to your Tooltip component
 
+// --- TYPES ---
+type TechChild = {
+  name: string;
+  icon: React.ReactNode;
+};
+
+type TechStack = {
+  name: string;
+  id: number;
+  description: string;
+  children: TechChild[];
+};
+
+// --- CONSTANTS ---
 const categories = [
   { id: "all", label: "All Skills", color: "bg-gradient-to-r from-purple-500 to-pink-500" },
   { id: "languages", label: "Languages", color: "bg-gradient-to-r from-blue-500 to-cyan-500" },
@@ -31,24 +49,14 @@ const categories = [
   { id: "tools", label: "Tools", color: "bg-gradient-to-r from-indigo-500 to-violet-500" },
 ];
 
-// Icon mapping
 const iconMap: Record<string, any> = {
-  Code2,
-  Layers,
-  Database,
-  FileCode,
-  Palette,
-  Server,
-  GitBranch,
-  Github,
-  Container,
-  Flame,
-  Terminal,
-  Key,
-  Table,
-  Cpu,
-  Braces,
+  Code2, Layers, Database, FileCode, Palette, Server, GitBranch, 
+  Github, Container, Flame, Terminal, Key, Table, Cpu, Braces,
 };
+
+// ==========================================
+// COMPONENTS FOR SKILLS SECTION
+// ==========================================
 
 const SkillBar = ({ level }: { level: number }) => (
   <div className="w-full h-3 bg-secondary/20 rounded-full overflow-hidden">
@@ -69,13 +77,7 @@ const SkillBar = ({ level }: { level: number }) => (
 );
 
 const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
-  const duplicatedSkills = [
-    ...skills,
-    ...skills,
-    ...skills,
-    ...skills,
-    ...skills,
-  ];
+  const duplicatedSkills = [...skills, ...skills, ...skills, ...skills, ...skills];
 
   return (
     <div className="w-full overflow-hidden py-10">
@@ -83,27 +85,16 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
       <motion.div
         className="flex min-w-max gap-2 mb-10"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          duration: 80,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
       >
         {duplicatedSkills.map((skill, index) => {
           const IconComponent = iconMap[skill.icon] || Code2;
-
           return (
-            <div
-              key={`${skill.name}-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]"
-            >
+            <div key={`${skill.name}-${index}`} className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]">
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
               </div>
-
-              <span className="text-sm font-medium text-center whitespace-nowrap">
-                {skill.name}
-              </span>
+              <span className="text-sm font-medium text-center whitespace-nowrap">{skill.name}</span>
             </div>
           );
         })}
@@ -113,191 +104,21 @@ const InfiniteScrollSkills = ({ skills }: { skills: Skill[] }) => {
       <motion.div
         className="flex min-w-max gap-2"
         animate={{ x: ["-50%", "0%"] }}
-        transition={{
-          duration: 80,
-          repeat: Infinity,
-          ease: "linear",
-        }}
+        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
       >
         {[...duplicatedSkills].reverse().map((skill, index) => {
           const IconComponent = iconMap[skill.icon] || Code2;
-
           return (
-            <div
-              key={`${skill.name}-reverse-${index}`}
-              className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]"
-            >
+            <div key={`${skill.name}-reverse-${index}`} className="flex-shrink-0 flex flex-col items-center gap-2 min-w-[80px]">
               <div className="w-16 h-16 rounded-full glass-subtle border-2 border-primary/50 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                 <IconComponent className="w-8 h-8 text-primary" />
               </div>
-
-              <span className="text-sm font-medium text-center whitespace-nowrap">
-                {skill.name}
-              </span>
+              <span className="text-sm font-medium text-center whitespace-nowrap">{skill.name}</span>
             </div>
           );
         })}
       </motion.div>
     </div>
-  );
-};
-
-const GitHubInsights = () => {
-  const [info, setInfo] = useState<any>({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Replace with your GitHub username
-    const username = "your-github-username";
-    
-    fetch(`https://api.github.com/users/${username}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setInfo(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching GitHub data:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="mt-16"
-    >
-      <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold mb-2">
-          GitHub{" "}
-          <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-            Activity
-          </span>
-        </h3>
-        <p className="text-muted-foreground">My coding journey on GitHub</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto px-4">
-        {/* Profile Details Card */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
-        >
-          <div className="p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-b border-border/30">
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-              <Github className="w-5 h-5" />
-              Profile Overview
-            </h4>
-          </div>
-          <div className="p-4 flex items-center justify-center bg-background">
-            <img
-              src={`https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=your-github-username&theme=algolia`}
-              alt="GitHub Profile Details"
-              className="max-w-full h-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-        </motion.div>
-
-        {/* Languages Card */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
-        >
-          <div className="p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-b border-border/30">
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-              <Code2 className="w-5 h-5" />
-              Top Languages
-            </h4>
-          </div>
-          <div className="p-4 flex items-center justify-center bg-background">
-            <img
-              src={`https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=your-github-username&theme=algolia`}
-              alt="Top Languages"
-              className="max-w-full h-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-        </motion.div>
-
-        {/* Stats Card */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
-        >
-          <div className="p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-b border-border/30">
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-              <GitBranch className="w-5 h-5" />
-              GitHub Stats
-            </h4>
-          </div>
-          <div className="p-4 flex items-center justify-center bg-background">
-            <img
-              src={`https://github-profile-summary-cards.vercel.app/api/cards/stats?username=your-github-username&theme=algolia`}
-              alt="GitHub Stats"
-              className="max-w-full h-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-        </motion.div>
-
-        {/* Most Used Languages Card */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden"
-        >
-          <div className="p-4 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 border-b border-border/30">
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-              <Terminal className="w-5 h-5" />
-              Most Productive Time
-            </h4>
-          </div>
-          <div className="p-4 flex items-center justify-center bg-background">
-            <img
-              src={`https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=your-github-username&theme=algolia`}
-              alt="Most Commit Language"
-              className="max-w-full h-auto object-contain"
-              loading="lazy"
-            />
-          </div>
-        </motion.div>
-      </div>
-
-      {/* GitHub Contribution Graph */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mt-12 max-w-6xl mx-auto px-4"
-      >
-        <div className="bg-card rounded-2xl shadow-lg border border-border/30 overflow-hidden">
-          <div className="p-4 bg-gradient-to-r from-indigo-500/10 to-violet-500/10 border-b border-border/30">
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-              <Flame className="w-5 h-5" />
-              Contribution Activity
-            </h4>
-          </div>
-          <div className="p-6 flex items-center justify-center bg-background">
-            <img
-              src={`https://ghchart.rshah.org/your-github-username`}
-              alt="GitHub Contribution Chart"
-              className="max-w-full h-auto"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
   );
 };
 
@@ -308,11 +129,8 @@ export const SkillsSection = () => {
   );
 
   return (
-    <section
-      id="skills"
-      className="py-16 px-0 bg-gradient-to-br from-background via-secondary/5 to-background"
-    >
-      <div className="w-full max-w-none">
+    <section id="skills" className="py-16 px-4 md:px-8 bg-gradient-to-br from-background via-secondary/5 to-background">
+      <div className="w-full max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -355,7 +173,7 @@ export const SkillsSection = () => {
         {activeCategory === "all" ? (
           <InfiniteScrollSkills skills={skills} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
               {filteredSkills.map((skill) => {
                 const IconComponent = iconMap[skill.icon] || Code2;
@@ -403,12 +221,109 @@ export const SkillsSection = () => {
             </AnimatePresence>
           </div>
         )}
-
-        {/* GitHub Insights Section */}
-        <GitHubInsights />
       </div>
     </section>
   );
 };
 
-export default SkillsSection;
+// ==========================================
+// COMPONENTS FOR TECH CARD (ORBIT)
+// ==========================================
+
+const TechList = ({ stack }: { stack: TechStack }) => {
+  // Duplicates the array to create a seamless infinite scroll effect
+  const result = Array.from({ length: 9 }).flatMap(() => stack.children);
+  
+  return (
+    <div className="overflow-hidden h-[85%] rounded-xl shadow bg-background/50">
+      <div className="animate-marquee-vertical flex flex-col gap-3 py-2">
+        {result.map((tech: TechChild, idx: number) => (
+          <div key={idx} className="flex items-center gap-3 px-2">
+            <div className="w-6 h-6 flex items-center justify-center text-primary">
+              {tech.icon}
+            </div>
+            <span className="text-base text-foreground font-medium">
+              {tech.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const TechChildCard = ({ stack }: { stack: TechStack }) => {
+  const [hover, setHover] = useState(false);
+  const radius = 100;
+
+  return (
+    <div
+      className="relative w-[300px] h-[320px] mx-auto overflow-hidden"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {/* Circular Orbit View (Visible on Hover) */}
+      <div
+        className={`absolute inset-0 border rounded-xl shadow flex items-center justify-center transition-all duration-700 bg-card ${
+          !hover ? "opacity-0 scale-90" : "opacity-100 scale-100"
+        }`}
+      >
+        <div
+          className={`absolute inset-0 transition-transform duration-1000 ease-linear ${
+            hover ? "animate-spin-slower" : ""
+          }`}
+        >
+          {stack.children.map((tech: TechChild, i: number) => {
+            const len = stack.children.length;
+            const angle = (i * 2 * Math.PI) / len;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            return (
+              <div
+                key={i}
+                className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full transition-all duration-700 ease-in-out flex items-center justify-center"
+                style={{
+                  backgroundColor: `hsl(${(i * 360) / len}, 80%, 50%)`,
+                  transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                }}
+              >
+                <Tooltip content={tech.name} position="left">
+                  {tech.icon}
+                </Tooltip>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* List View (Visible by Default) */}
+      <div
+        className={`absolute inset-0 border rounded-xl p-6 shadow transition-all duration-700 bg-card ${
+          !hover
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-90 pointer-events-none"
+        }`}
+      >
+        <h3 className="text-xl font-semibold mb-4 text-foreground border-b pb-2">
+          {stack?.name}
+        </h3>
+        <TechList stack={stack} />
+      </div>
+    </div>
+  );
+};
+
+export const TechCard = () => {
+  return (
+    <div className="w-full">
+      <div className="grid md:grid-cols-3 gap-8">
+        {techStack.map((stack: TechStack, i: number) => (
+          <div key={i}>
+            <TechChildCard stack={stack} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
