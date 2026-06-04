@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
@@ -166,7 +166,7 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
 };
 
 /* ================= SLIDER ================= */
-const CertificationSlider = ({ certs }: { certs: CertificationUI[] }) => {
+const CertificationSlider = ({ certs, isAll }: { certs: CertificationUI[]; isAll: boolean }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -193,6 +193,23 @@ const CertificationSlider = ({ certs }: { certs: CertificationUI[] }) => {
     setDirection(-1);
     setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
+
+  // Auto-slide effect (only when "all" category is active)
+  useEffect(() => {
+    if (!isAll || totalPages <= 1) return;
+
+    const interval = setInterval(() => {
+      nextPage();
+    }, 4000); // Auto-slide every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [isAll, totalPages, currentPage]);
+
+  // Reset to first page when filter changes
+  useEffect(() => {
+    setCurrentPage(0);
+    setDirection(0);
+  }, [certs.length]);
 
   // Slide animation variants
   const variants = {
@@ -354,7 +371,7 @@ export const CertificationsSection = () => {
           transition={{ duration: 0.4 }}
           className="px-8"
         >
-          <CertificationSlider certs={filtered} />
+          <CertificationSlider certs={filtered} isAll={activeFilter === "all"} />
         </motion.div>
 
       </div>
