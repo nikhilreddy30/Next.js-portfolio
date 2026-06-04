@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-// 👇 Import Variants type from framer-motion
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
 /* ================= CATEGORY CONFIG ================= */
@@ -94,44 +93,12 @@ const certifications: CertificationUI[] = portfolioCertifications.map(
   }
 );
 
-/* ================= ANIMATION VARIANTS ================= */
-// 👇 Explicitly type these as Variants to fix the TypeScript error
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { 
-    opacity: 0, 
-    x: 100,
-  },
-  visible: { 
-    opacity: 1, 
-    x: 0,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-      // Removed 'duration' because spring animations use physics (stiffness/damping) 
-      // instead of a fixed time duration.
-    },
-  },
-};
-
 /* ================= CARD ================= */
 const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
   return (
     <motion.div
-      variants={cardVariants}
       whileHover={{ y: -10, scale: 1.02 }}
-      className="group relative"
+      className="group relative h-full"
     >
       <div className="relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-6 h-full hover:shadow-xl transition-all">
 
@@ -142,7 +109,7 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
           whileHover={{ opacity: 1 }}
         />
 
-        <div className="relative z-10">
+        <div className="relative z-10 flex flex-col h-full">
 
           {/* TOP: ISSUER ICON */}
           <div className="flex justify-between items-start mb-5">
@@ -169,8 +136,8 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
             {cert.description}
           </p>
 
-          {/* ISSUER TEXT ONLY (NO DUPLICATE LOGO) */}
-          <div className="flex items-center justify-between mb-5">
+          {/* ISSUER TEXT ONLY */}
+          <div className="flex items-center justify-between mb-5 mt-auto">
             <span className="text-sm text-slate-300 font-medium">
               {cert.issuer}
             </span>
@@ -198,6 +165,125 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
   );
 };
 
+/* ================= SLIDER ================= */
+const CertificationSlider = ({ certs }: { certs: CertificationUI[] }) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  // Cards per page based on screen size
+  const cardsPerPage = 3;
+  const totalPages = Math.ceil(certs.length / cardsPerPage);
+
+  const currentCerts = certs.slice(
+    currentPage * cardsPerPage,
+    currentPage * cardsPerPage + cardsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    setDirection(page > currentPage ? 1 : -1);
+    setCurrentPage(page);
+  };
+
+  const nextPage = () => {
+    setDirection(1);
+    setCurrentPage((prev) => (prev + 1) % totalPages);
+  };
+
+  const prevPage = () => {
+    setDirection(-1);
+    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+  };
+
+  // Slide animation variants
+  const variants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 300 : -300,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (dir: number) => ({
+      x: dir < 0 ? 300 : -300,
+      opacity: 0,
+    }),
+  };
+
+  if (certs.length === 0) {
+    return (
+      <div className="text-center py-12 text-slate-400">
+        No certifications found in this category.
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      {/* SLIDER VIEWPORT */}
+      <div className="overflow-hidden rounded-2xl">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={currentPage}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.3 },
+            }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {currentCerts.map((cert) => (
+              <CertificationCard key={cert.id} cert={cert} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* NAVIGATION BUTTONS */}
+      {totalPages > 1 && (
+        <>
+          <button
+            onClick={prevPage}
+            className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg hover:scale-110"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={nextPage}
+            className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg hover:scale-110"
+            aria-label="Next"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </>
+      )}
+
+      {/* DOTS INDICATOR */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 mt-8">
+          {Array.from({ length: totalPages }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => goToPage(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === currentPage
+                  ? "w-8 bg-gradient-to-r from-cyan-400 to-blue-500"
+                  : "w-2 bg-slate-600 hover:bg-slate-500"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 /* ================= MAIN ================= */
 export const CertificationsSection = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -222,15 +308,15 @@ export const CertificationsSection = () => {
       <div className="max-w-6xl mx-auto">
 
         {/* HEADER */}
-	      <motion.div
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-		  <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
+          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
             ──── ACHIEVEMENTS
-          </div>	  
+          </div>
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
             My{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
@@ -260,19 +346,15 @@ export const CertificationsSection = () => {
           ))}
         </div>
 
-        {/* GRID */}
-        <motion.div 
+        {/* SLIDER */}
+        <motion.div
           key={activeFilter}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="px-8"
         >
-          <AnimatePresence mode="popLayout">
-            {filtered.map((cert) => (
-              <CertificationCard key={cert.id} cert={cert} />
-            ))}
-          </AnimatePresence>
+          <CertificationSlider certs={filtered} />
         </motion.div>
 
       </div>
