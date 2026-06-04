@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
@@ -93,15 +93,40 @@ const certifications: CertificationUI[] = portfolioCertifications.map(
   }
 );
 
+/* ================= ANIMATION VARIANTS ================= */
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { 
+    opacity: 0, 
+    x: 100,
+  },
+  visible: { 
+    opacity: 1, 
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+      duration: 0.6,
+    },
+  },
+};
+
 /* ================= CARD ================= */
-const CertificationCard = ({ cert, isAll, index }: { cert: CertificationUI; isAll: boolean; index: number }) => {
+const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
   return (
     <motion.div
-      // Animate from right (x: 50) to original position (x: 0) only when "all" is active
-      initial={isAll ? { opacity: 0, x: 50 } : false}
-      animate={isAll ? { opacity: 1, x: 0 } : false}
-      // Stagger the animation based on the card's index for a cascading effect
-      transition={isAll ? { duration: 0.5, delay: index * 0.1, ease: "easeOut" } : {}}
+      variants={cardVariants}
       whileHover={{ y: -10, scale: 1.02 }}
       className="group relative"
     >
@@ -233,16 +258,19 @@ export const CertificationsSection = () => {
         </div>
 
         {/* GRID */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((cert, index) => (
-            <CertificationCard 
-              key={cert.id} 
-              cert={cert} 
-              isAll={activeFilter === "all"} 
-              index={index} 
-            />
-          ))}
-        </div>
+        <motion.div 
+          key={activeFilter}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <AnimatePresence mode="popLayout">
+            {filtered.map((cert) => (
+              <CertificationCard key={cert.id} cert={cert} />
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
       </div>
     </section>
