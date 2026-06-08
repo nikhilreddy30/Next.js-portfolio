@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
@@ -39,7 +39,7 @@ const CATEGORY_CONFIG = {
     color: "border-indigo-500 text-indigo-400",
     bg: "from-indigo-500/20 to-indigo-500/5",
     iconBg: "bg-indigo-500/20 border-indigo-500/30",
-    button: "bg-indigo-500 hover:bg-cyan-600",
+    button: "bg-indigo-500 hover:bg-indigo-600",
     glow: "rgba(99,102,241,0.35)",
   },
   Professional: {
@@ -107,17 +107,23 @@ const CertificationCard = ({
   isActive?: boolean;
 }) => {
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-4 h-full flex flex-col ${isActive ? 'shadow-xl' : ''}`}>
+    <div
+      className={`relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-700/50 p-4 h-full flex flex-col backdrop-blur-sm ${
+        isActive ? "shadow-2xl" : "shadow-lg"
+      }`}
+    >
       {/* Gradient */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${cert.bg} ${isActive ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
+        className={`absolute inset-0 bg-gradient-to-br ${cert.bg} transition-opacity duration-300 ${
+          isActive ? "opacity-100" : "opacity-30"
+        }`}
       />
 
       <div className="relative z-10 flex flex-col h-full">
         {/* TOP: ISSUER ICON */}
         <div className="flex justify-between items-start mb-3">
           <div
-            className={`w-10 h-10 rounded-xl ${cert.iconBg} flex items-center justify-center`}
+            className={`w-11 h-11 rounded-xl ${cert.iconBg} border flex items-center justify-center`}
           >
             <img
               src={cert.issuerLogo}
@@ -126,28 +132,28 @@ const CertificationCard = ({
             />
           </div>
           <span
-            className={`px-2 py-0.5 rounded-full text-xs border ${cert.color}`}
+            className={`px-2.5 py-0.5 rounded-full text-xs border ${cert.color}`}
           >
             {cert.category}
           </span>
         </div>
 
         {/* TITLE */}
-        <h3 className="text-base font-bold text-white mb-1.5 line-clamp-2 flex-shrink-0">
+        <h3 className="text-base font-bold text-white mb-2 line-clamp-2 leading-tight">
           {cert.title}
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-slate-400 mb-3 line-clamp-3 flex-grow min-h-[50px] overflow-hidden">
+        <p className="text-xs text-slate-400 mb-3 line-clamp-2 flex-1 leading-relaxed">
           {cert.description}
         </p>
 
         {/* ISSUER + YEAR */}
         <div className="flex items-center justify-between mb-3 flex-shrink-0">
-          <span className="text-sm text-slate-300 font-medium">
+          <span className="text-xs text-slate-300 font-medium">
             {cert.issuer}
           </span>
-          <span className="text-sm text-slate-400 font-semibold">
+          <span className="text-xs text-slate-400 font-semibold">
             {cert.year}
           </span>
         </div>
@@ -157,13 +163,13 @@ const CertificationCard = ({
           href={cert.certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-white font-semibold transition ${cert.button} mt-auto`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button} mt-auto`}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           onClick={(e) => e.stopPropagation()}
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          <span className="text-sm">View Certificate</span>
+          View Certificate
         </motion.a>
       </div>
     </div>
@@ -175,32 +181,23 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Card dimensions (responsive)
   const getCardWidth = () => {
-    if (typeof window === "undefined") return 300;
-    if (window.innerWidth < 640) return Math.min(window.innerWidth - 40, 260);
+    if (typeof window === "undefined") return 320;
+    if (window.innerWidth < 640) return Math.min(window.innerWidth - 60, 260);
     if (window.innerWidth < 1024) return 300;
-    return 320;
+    return 340;
   };
 
-  const [cardWidth, setCardWidth] = useState(320);
-  const [containerHeight, setContainerHeight] = useState(0);
+  const [cardWidth, setCardWidth] = useState(340);
 
   useEffect(() => {
-    const update = () => {
-      const width = getCardWidth();
-      setCardWidth(width);
-      // Calculate height based on card aspect ratio (approx 1.4:1)
-      setContainerHeight(width * 1.4);
-    };
+    const update = () => setCardWidth(getCardWidth());
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Navigation
   const next = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % items.length);
   }, [items.length]);
@@ -213,7 +210,6 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
     setCurrentIndex(index);
   }, []);
 
-  // Autoplay
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
       if (!isHovering.current) next();
@@ -223,7 +219,6 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
     };
   }, [next]);
 
-  // Get visible cards
   const getVisibleCards = () => {
     const visible = [];
     for (let i = -1; i <= 1; i++) {
@@ -240,53 +235,74 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
 
   const visibleCards = getVisibleCards();
 
+  // --- Layout math ---
+  const centerScale = 1.18;
+  const sideScale = 0.85;
+  const cardBaseHeight = cardWidth * 1.3;
+
+  // Container must fit the scaled center card + breathing room
+  const containerHeight = cardBaseHeight * centerScale + 40;
+
+  // Side offset: positions side card centers so ~30% of their width peeks out
+  // behind the center card (Cover Flow style)
+  const sideOffset = cardWidth * 0.45;
+
   return (
     <div
-      ref={containerRef}
-      className="relative w-full select-none overflow-visible"
+      className="relative w-full select-none"
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
     >
-      {/* Carousel container - increased height to accommodate scaled center card */}
-      <div 
-        className="relative mx-auto overflow-visible"
-        style={{ height: `${containerHeight * 1.2}px` }}
-      >
+      {/* Carousel container — overflow-visible so the scaled center card is NEVER clipped */}
+      <div className="relative mx-auto overflow-visible">
         <div
-          className="flex items-center justify-center relative"
+          className="flex items-center justify-center"
           style={{
-            height: "100%",
+            height: `${containerHeight}px`,
             width: "100%",
             maxWidth: "1200px",
+            margin: "0 auto",
           }}
         >
           {visibleCards.map(({ item, position, isActive }, idx) => {
-            // Calculate visibility percentage (30% for side cards)
-            const visibility = isActive ? 1 : 0.3;
-            
+            const translateX = position * sideOffset;
+
             return (
               <motion.div
                 key={`${item.id}-${idx}`}
-                onClick={() => position !== 0 && goToIndex((currentIndex + position + items.length) % items.length)}
+                onClick={() =>
+                  position !== 0 &&
+                  goToIndex(
+                    (currentIndex + position + items.length) % items.length
+                  )
+                }
                 className="absolute cursor-pointer"
                 style={{
-                  width: cardWidth,
-                  height: containerHeight,
-                  // Position using translateX for better control
+                  width: `${cardWidth}px`,
+                  height: `${cardBaseHeight}px`,
                   left: "50%",
-                  transform: `translateX(${position * cardWidth * 0.7}px) translateX(-50%)`,
+                  top: "50%",
+                  marginLeft: `-${cardWidth / 2}px`,
+                  marginTop: `-${cardBaseHeight / 2}px`,
+                  transformOrigin: "center center",
                 }}
                 animate={{
-                  scale: isActive ? 1.18 : 0.85,
-                  opacity: isActive ? 1 : 0.65,
+                  x: translateX,
+                  scale: isActive ? centerScale : sideScale,
+                  opacity: isActive ? 1 : 0.6,
                   zIndex: isActive ? 10 : 1,
-                  y: isActive ? 0 : 20, // Slight vertical offset for depth
+                  filter: isActive ? "brightness(1)" : "brightness(0.7)",
                 }}
                 transition={{
                   type: "spring",
                   stiffness: 300,
-                  damping: 25,
+                  damping: 30,
                   mass: 0.8,
+                }}
+                whileHover={{
+                  scale: isActive ? centerScale : sideScale * 1.05,
+                  opacity: 0.85,
+                  transition: { duration: 0.2 },
                 }}
               >
                 <CertificationCard cert={item} isActive={isActive} />
@@ -297,7 +313,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       </div>
 
       {/* Navigation dots */}
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="flex justify-center gap-2 mt-8">
         {items.map((_, i) => (
           <button
             key={i}
@@ -315,14 +331,14 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 z-[20] w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition text-xl"
         aria-label="Previous"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 z-[20] w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition text-xl"
         aria-label="Next"
       >
         ›
@@ -353,17 +369,16 @@ export const CertificationsSection = () => {
   return (
     <section id="certifications" className="py-16 px-4 overflow-x-hidden">
       <div className="max-w-6xl mx-auto">
-
         {/* HEADER */}
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold mb-2">Certifications</h2>
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold mb-3">Certifications</h2>
           <p className="text-slate-400">
             Verified credentials across cloud, development, and AI
           </p>
         </div>
 
         {/* FILTER */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -381,7 +396,7 @@ export const CertificationsSection = () => {
 
         {/* CENTER-FOCUSED CAROUSEL (all) or GRID (filtered) */}
         {activeFilter === "all" ? (
-          <div className="px-2">
+          <div className="px-4">
             <CenterFocusedCarousel items={certifications} />
           </div>
         ) : (
@@ -390,12 +405,12 @@ export const CertificationsSection = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {filtered.map((cert) => (
               <motion.div
                 key={cert.id}
-                whileHover={{ y: -8, scale: 1.02 }}
+                whileHover={{ y: -10, scale: 1.02 }}
                 className="group relative"
               >
                 <CertificationCard cert={cert} isActive />
@@ -403,7 +418,6 @@ export const CertificationsSection = () => {
             ))}
           </motion.div>
         )}
-
       </div>
     </section>
   );
