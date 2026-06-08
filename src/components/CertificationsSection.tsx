@@ -174,7 +174,6 @@ const CertificationCard = ({
 
 // Duplicate items for seamless infinite loop
 function buildLoopItems(items: CertificationUI[]) {
-  // Triple the array so we can loop seamlessly
   return [...items, ...items, ...items];
 }
 
@@ -196,19 +195,19 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
   // Card dimensions (responsive)
   const getCardWidth = () => {
     if (typeof window === "undefined") return 320;
-    if (window.innerWidth < 640) return Math.min(window.innerWidth - 48, 300);
-    if (window.innerWidth < 1024) return 300;
-    return 340;
+    if (window.innerWidth < 640) return Math.min(window.innerWidth - 48, 280);
+    if (window.innerWidth < 1024) return 320;
+    return 380;
   };
 
   const getGap = () => {
-    if (typeof window === "undefined") return 24;
-    if (window.innerWidth < 640) return 16;
-    return 28;
+    if (typeof window === "undefined") return 32;
+    if (window.innerWidth < 640) return 20;
+    return 40;
   };
 
-  const [cardWidth, setCardWidth] = useState(340);
-  const [gap, setGap] = useState(28);
+  const [cardWidth, setCardWidth] = useState(380);
+  const [gap, setGap] = useState(40);
 
   useEffect(() => {
     const update = () => {
@@ -239,7 +238,7 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
       if (!isHovering.current) next();
-    }, 2800);
+    }, 3000); // Slower for dramatic effect
     return () => {
       if (autoplayRef.current) clearInterval(autoplayRef.current);
     };
@@ -271,38 +270,40 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
     const absOffset = Math.abs(offset);
 
     // Only render cards within visible range
-    const visible = absOffset <= 3;
+    const visible = absOffset <= 4;
 
-    // Dramatic scaling: center=1.25, ±1=0.75, ±2=0.55, ±3=0.4
+    // Dramatic scaling: center=1.6, ±1=0.8, ±2=0.6, ±3=0.4, ±4=0.3
     const scaleMap: Record<number, number> = {
-      0: 1.25,
-      1: 0.75,
-      2: 0.55,
+      0: 1.6,
+      1: 0.8,
+      2: 0.6,
       3: 0.4,
+      4: 0.3,
     };
-    const scale = scaleMap[Math.min(absOffset, 3)] ?? 0.35;
+    const scale = scaleMap[Math.min(absOffset, 4)] ?? 0.25;
 
-    // Opacity - more dramatic fade
+    // Opacity - dramatic fade
     const opacityMap: Record<number, number> = {
       0: 1,
-      1: 0.7,
-      2: 0.4,
-      3: 0.2,
+      1: 0.85,
+      2: 0.65,
+      3: 0.4,
+      4: 0.2,
     };
-    const opacity = opacityMap[Math.min(absOffset, 3)] ?? 0;
+    const opacity = opacityMap[Math.min(absOffset, 4)] ?? 0;
 
     // Horizontal translation - increased spread
-    const spreadFactor = cardWidth * 0.8 + gap;
+    const spreadFactor = cardWidth * 1.2 + gap;
     const translateX = offset * spreadFactor;
 
-    // 3D rotation - more pronounced for side cards
-    const rotateY = offset === 0 ? 0 : offset > 0 ? -35 : 35;
+    // 3D rotation - cinematic
+    const rotateY = offset === 0 ? 0 : offset > 0 ? -45 : 45;
 
-    // Blur - increased blur for depth
-    const blur = absOffset === 0 ? 0 : absOffset === 1 ? 2 : absOffset === 2 ? 4 : 6;
+    // Blur - strong depth
+    const blur = absOffset === 0 ? 0 : absOffset === 1 ? 3 : absOffset === 2 ? 6 : absOffset === 3 ? 10 : 14;
 
     // Z-index - ensure center is always on top
-    const zIndex = 100 - absOffset * 15;
+    const zIndex = 100 - absOffset * 20;
 
     return { scale, opacity, translateX, rotateY, blur, zIndex, visible };
   };
@@ -311,7 +312,7 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
     <div
       ref={containerRef}
       className="relative w-full select-none"
-      style={{ perspective: "1200px" }}
+      style={{ perspective: "1500px" }}
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
       onMouseDown={handleDragStart}
@@ -323,7 +324,7 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
       <div
         className="relative mx-auto overflow-visible"
         style={{
-          height: `${cardWidth * 1.45}px`, // Increased height for larger center card
+          height: `${cardWidth * 1.65}px`, // Increased for larger center card
           width: "100%",
           maxWidth: "100%",
         }}
@@ -348,9 +349,9 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
               }}
               transition={{
                 type: "spring",
-                stiffness: 300, // Increased stiffness for quicker movement
-                damping: 25, // Reduced damping for less bounce
-                mass: 0.7,
+                stiffness: 350,
+                damping: 20,
+                mass: 0.6,
               }}
               style={{
                 position: "absolute",
@@ -361,8 +362,8 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
                 cursor: isCenter ? "default" : "pointer",
                 transformStyle: "preserve-3d",
                 boxShadow: isCenter
-                  ? `0 0 60px 12px ${cert.glow}, 0 30px 70px rgba(0,0,0,0.6)`
-                  : "0 10px 40px rgba(0,0,0,0.4)",
+                  ? `0 0 80px 20px ${cert.glow}, 0 40px 80px rgba(0,0,0,0.7)`
+                  : "0 8px 32px rgba(0,0,0,0.3)",
                 borderRadius: "24px",
               }}
             >
@@ -382,8 +383,8 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
               onClick={() => goTo(count + i)}
               className={`rounded-full transition-all duration-300 ${
                 isActive
-                  ? "w-8 h-3 bg-white" // Larger active dot
-                  : "w-3 h-3 bg-slate-600 hover:bg-slate-400"
+                  ? "w-10 h-4 bg-white"
+                  : "w-4 h-4 bg-slate-600 hover:bg-slate-400"
               }`}
               aria-label={`Go to card ${i + 1}`}
             />
@@ -394,14 +395,14 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
       {/* Nav arrows */}
       <button
         onClick={prev}
-        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[200] w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Previous"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[200] w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Next"
       >
         ›
