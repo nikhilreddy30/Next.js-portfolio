@@ -108,7 +108,7 @@ const CertificationCard = ({
 }) => {
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-700/50 p-4 h-full flex flex-col backdrop-blur-sm ${
+      className={`relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-700/50 p-4 backdrop-blur-sm ${
         isActive ? "shadow-2xl" : "shadow-lg"
       }`}
     >
@@ -119,7 +119,7 @@ const CertificationCard = ({
         }`}
       />
 
-      <div className="relative z-10 flex flex-col h-full">
+      <div className="relative z-10 flex flex-col">
         {/* TOP: ISSUER ICON */}
         <div className="flex justify-between items-start mb-3">
           <div
@@ -144,12 +144,12 @@ const CertificationCard = ({
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-xs text-slate-400 mb-2 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-slate-400 mb-3 line-clamp-2 leading-relaxed">
           {cert.description}
         </p>
 
         {/* ISSUER + YEAR */}
-        <div className="flex items-center justify-between mb-3 flex-shrink-0">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-xs text-slate-300 font-medium">
             {cert.issuer}
           </span>
@@ -181,6 +181,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [cardWidth, setCardWidth] = useState(340);
 
   const getCardWidth = () => {
     if (typeof window === "undefined") return 320;
@@ -188,8 +189,6 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
     if (window.innerWidth < 1024) return 300;
     return 340;
   };
-
-  const [cardWidth, setCardWidth] = useState(340);
 
   useEffect(() => {
     const update = () => setCardWidth(getCardWidth());
@@ -238,13 +237,15 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   // --- Layout math ---
   const centerScale = 1.18;
   const sideScale = 0.85;
-  const cardBaseHeight = cardWidth * 1.0;
 
-  // Container must fit the scaled center card + breathing room
-  const containerHeight = cardBaseHeight * centerScale + 20;
+  // Estimate card height based on content (icon + title + desc + issuer + button + padding)
+  // This is a fixed estimate that matches the actual rendered card height
+  const cardHeight = 260;
+
+  // Container height must fit the scaled center card + breathing room
+  const containerHeight = cardHeight * centerScale + 40;
 
   // Side offset: positions side card centers so ~30% of their width peeks out
-  // behind the center card (Cover Flow style)
   const sideOffset = cardWidth * 0.45;
 
   return (
@@ -279,11 +280,11 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                 className="absolute cursor-pointer"
                 style={{
                   width: `${cardWidth}px`,
-                  height: `${cardBaseHeight}px`,
+                  height: `${cardHeight}px`,
                   left: "50%",
                   top: "50%",
                   marginLeft: `-${cardWidth / 2}px`,
-                  marginTop: `-${cardBaseHeight / 2}px`,
+                  marginTop: `-${cardHeight / 2}px`,
                   transformOrigin: "center center",
                 }}
                 animate={{
@@ -305,7 +306,9 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                   transition: { duration: 0.2 },
                 }}
               >
-                <CertificationCard cert={item} isActive={isActive} />
+                <div className="w-full h-full">
+                  <CertificationCard cert={item} isActive={isActive} />
+                </div>
               </motion.div>
             );
           })}
