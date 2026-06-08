@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimizePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
