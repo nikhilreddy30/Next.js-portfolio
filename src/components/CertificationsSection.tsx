@@ -144,12 +144,12 @@ const CertificationCard = ({
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-xs text-slate-400 mb-3 line-clamp-2 flex-1 leading-relaxed">
+        <p className="text-xs text-slate-400 mb-2 line-clamp-2 flex-1 leading-relaxed">
           {cert.description}
         </p>
 
         {/* ISSUER + YEAR */}
-        <div className="flex items-center justify-between mb-3 flex-shrink-0">
+        <div className="flex items-center justify-between mb-2 flex-shrink-0">
           <span className="text-xs text-slate-300 font-medium">
             {cert.issuer}
           </span>
@@ -163,7 +163,7 @@ const CertificationCard = ({
           href={cert.certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button} mt-auto`}
+          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button}`}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={(e) => e.stopPropagation()}
