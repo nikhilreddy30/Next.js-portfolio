@@ -177,6 +177,7 @@ const CertificationCard = ({
 };
 
 /* ================= CENTER-FOCUSED CAROUSEL ================= */
+/* ================= CENTER-FOCUSED CAROUSEL ================= */
 const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
@@ -244,8 +245,8 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   // Container height fits the scaled center card + breathing room
   const containerHeight = cardHeight * centerScale + 40;
 
-  // Side offset: 0.42 makes ~40% of the side card peek out from behind the center card
-  const sideOffset = cardWidth * 0.42;
+  // Side offset: 0.7 pushes side cards further out for better visibility (~30-35% visible)
+  const sideOffset = cardWidth * 0.7;
 
   return (
     <div
@@ -289,11 +290,9 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                 animate={{
                   x: translateX,
                   scale: isActive ? centerScale : sideScale,
-                  // Increased opacity for side cards so they are more visible
-                  opacity: isActive ? 1 : 0.8,
+                  opacity: isActive ? 1 : 0.85,
                   zIndex: isActive ? 10 : 1,
-                  // Increased brightness for side cards
-                  filter: isActive ? "brightness(1)" : "brightness(0.85)",
+                  filter: isActive ? "brightness(1)" : "brightness(0.9)",
                 }}
                 transition={{
                   type: "spring",
@@ -302,9 +301,9 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                   mass: 0.8,
                 }}
                 whileHover={{
-                  scale: isActive ? centerScale : sideScale * 1.05,
-                  opacity: 0.9,
-                  filter: "brightness(0.95)",
+                  scale: isActive ? centerScale : sideScale * 1.08,
+                  opacity: 0.95,
+                  filter: "brightness(1)",
                   transition: { duration: 0.2 },
                 }}
               >
