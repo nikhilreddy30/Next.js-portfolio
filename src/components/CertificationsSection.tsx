@@ -107,47 +107,47 @@ const CertificationCard = ({
   isActive?: boolean;
 }) => {
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-5 h-full flex flex-col ${isActive ? 'shadow-xl' : ''}`}>
-      {/* Gradient */}
+    <div className={`relative w-full h-full overflow-visible rounded-3xl bg-slate-900/60 border border-slate-700/50 p-5 flex flex-col shadow-2xl`}>
+      {/* Gradient Background */}
       <div
         className={`absolute inset-0 bg-gradient-to-br ${cert.bg} ${isActive ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
       />
 
       <div className="relative z-10 flex flex-col h-full">
-        {/* TOP: ISSUER ICON */}
-        <div className="flex justify-between items-start mb-4">
+        {/* TOP: ISSUER ICON + CATEGORY */}
+        <div className="flex justify-between items-start mb-3">
           <div
-            className={`w-12 h-12 rounded-xl ${cert.iconBg} flex items-center justify-center`}
+            className={`w-10 h-10 rounded-xl ${cert.iconBg} flex items-center justify-center shrink-0`}
           >
             <img
               src={cert.issuerLogo}
               alt={cert.issuer}
-              className="w-7 h-7 object-contain"
+              className="w-6 h-6 object-contain"
             />
           </div>
           <span
-            className={`px-2.5 py-0.5 rounded-full text-xs border ${cert.color}`}
+            className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold tracking-wider border ${cert.color} shrink-0`}
           >
             {cert.category}
           </span>
         </div>
 
         {/* TITLE */}
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 flex-shrink-0">
+        <h3 className={`text-base font-bold text-white mb-1.5 line-clamp-2 leading-tight ${isActive ? "text-lg" : ""}`}>
           {cert.title}
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-slate-400 mb-4 line-clamp-3 flex-grow min-h-[60px] overflow-hidden">
+        <p className="text-xs text-slate-400 mb-3 line-clamp-3 leading-relaxed flex-grow">
           {cert.description}
         </p>
 
         {/* ISSUER + YEAR */}
-        <div className="flex items-center justify-between mb-4 flex-shrink-0">
-          <span className="text-sm text-slate-300 font-medium">
+        <div className="flex items-center justify-between mb-3 mt-auto">
+          <span className="text-xs text-slate-300 font-medium">
             {cert.issuer}
           </span>
-          <span className="text-sm text-slate-400 font-semibold">
+          <span className="text-xs text-slate-400 font-semibold">
             {cert.year}
           </span>
         </div>
@@ -157,13 +157,13 @@ const CertificationCard = ({
           href={cert.certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white font-semibold transition ${cert.button} mt-auto`}
+          className={`w-full flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={(e) => e.stopPropagation()}
         >
-          <ExternalLink className="w-4 h-4" />
-          View Certificate
+          <ExternalLink className="w-3.5 h-3.5" />
+          <span>Credential</span>
         </motion.a>
       </div>
     </div>
@@ -175,21 +175,33 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  
+  // Configuration
+  const baseCardWidth = 320; 
+  const sideCardVisibility = 0.35; // 35% visible
+  const gap = 24; // px gap between cards
+  
+  // Calculate container width to ensure enough space for scaling + spacing
+  // We want the active card (scale 1.2) + 2 side cards (35% width) to fit
+  const getContainerStyle = useCallback(() => {
+    const activeWidth = baseCardWidth * 1.2;
+    const sideWidth = baseCardWidth * sideCardVisibility;
+    const totalWidth = activeWidth + (sideWidth * 2) + (gap * 4); // Extra buffer for scale overflow
+    return {
+      maxWidth: "100%",
+      width: Math.max(320, totalWidth), 
+    };
+  }, []);
+
+  const [containerWidth, setContainerWidth] = useState(320);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Card dimensions (responsive)
-  const getCardWidth = () => {
-    if (typeof window === "undefined") return 320;
-    if (window.innerWidth < 640) return Math.min(window.innerWidth - 40, 280);
-    if (window.innerWidth < 1024) return 320;
-    return 360;
-  };
-
-  const [cardWidth, setCardWidth] = useState(360);
-
+  // Handle Resize
   useEffect(() => {
     const update = () => {
-      setCardWidth(getCardWidth());
+      if(containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
     };
     update();
     window.addEventListener("resize", update);
@@ -219,7 +231,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
     };
   }, [next]);
 
-  // Get visible cards
+  // Get visible cards logic
   const getVisibleCards = () => {
     const visible = [];
     for (let i = -1; i <= 1; i++) {
@@ -227,7 +239,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       visible.push({
         item: items[index],
         index,
-        position: i,
+        position: i, // -1 (left), 0 (center), 1 (right)
         isActive: i === 0,
       });
     }
@@ -238,63 +250,85 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
 
   return (
     <div
-      ref={containerRef}
-      className="relative w-full select-none"
+      className="relative w-full select-none flex flex-col items-center"
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
     >
-      {/* Carousel container */}
-      <div className="relative mx-auto overflow-hidden">
-        <div
-          className="flex items-center justify-center"
-          style={{
-            height: `${cardWidth * 1.4}px`,
-            width: "100%",
-            maxWidth: "1200px",
-          }}
-        >
-          {visibleCards.map(({ item, position, isActive }, idx) => (
+      {/* 
+         Main Carousel Stage 
+         - overflow-visible: Allows the active card to scale up (1.2x) without being cropped.
+         - height: Dynamic based on base card height * scale factor + padding.
+      */}
+      <div 
+        ref={containerRef}
+        className="relative overflow-visible flex items-center justify-center"
+        style={{ 
+          ...getContainerStyle(),
+          // Height calculation: Base 420px (approx card height) * 1.2 (scale) + 40px padding
+          height: "520px", 
+        }}
+      >
+        {visibleCards.map(({ item, position, isActive }, idx) => {
+          // Calculate positioning
+          // Base center is 50% of container.
+          // Active card offset: 0
+          // Side card offset: (Active Width / 2) + (Side Width / 2) + Gap
+          
+          const activeWidth = baseCardWidth * 1.2;
+          const sideWidth = baseCardWidth * sideCardVisibility;
+          
+          // Determine X offset
+          let xOffset = 0;
+          if (position === -1) {
+            // Left Card
+            xOffset = -(activeWidth / 2) - (sideWidth / 2) - gap;
+          } else if (position === 1) {
+            // Right Card
+            xOffset = (activeWidth / 2) + (sideWidth / 2) + gap;
+          }
+
+          return (
             <motion.div
               key={`${item.id}-${idx}`}
               onClick={() => position !== 0 && goToIndex((currentIndex + position + items.length) % items.length)}
               className="absolute cursor-pointer"
+              // Positioning Logic
               style={{
-                width: isActive ? `${cardWidth * 1.25}px` : `${cardWidth * 0.8}px`,
-                height: "100%",
-                // Position cards with proper spacing for partial visibility
-                left: `calc(50% + ${position * (cardWidth * 0.7 + 40)}px - ${isActive ? cardWidth * 0.625 : cardWidth * 0.4}px)`,
-                // Add clip-path for partial visibility
-                clipPath: isActive ? 
-                  "none" : 
-                  `inset(0 ${position === -1 ? '0' : 'auto'} 0 ${position === 1 ? '0' : 'auto'})`,
+                left: "50%", // Start from center
+                top: "50%",  // Start from middle
+                x: xOffset,  // Move left/right
+                y: "-50%",   // Center vertically
               }}
               animate={{
-                scale: isActive ? 1.25 : 0.8,
-                opacity: isActive ? 1 : 0.7,
-                zIndex: isActive ? 10 : 1,
+                scale: isActive ? 1.2 : 1, // Center 1.2x, Side 1.0x
+                opacity: isActive ? 1 : 0.6, // Center opaque, Side dimmed
+                zIndex: isActive ? 20 : 10, // Center on top
+                filter: isActive ? "blur(0px)" : "blur(1px)", // Slight blur for side cards
               }}
               transition={{
                 type: "spring",
                 stiffness: 300,
-                damping: 25,
+                damping: 30,
                 mass: 0.8,
               }}
             >
-              <CertificationCard cert={item} isActive={isActive} />
+              <div style={{ width: baseCardWidth, height: "420px" }}>
+                <CertificationCard cert={item} isActive={isActive} />
+              </div>
             </motion.div>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {/* Navigation dots */}
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="flex justify-center gap-2 mt-4 z-30 relative">
         {items.map((_, i) => (
           <button
             key={i}
             onClick={() => goToIndex(i)}
             className={`rounded-full transition-all duration-300 ${
               currentIndex === i
-                ? "w-8 h-2 bg-white"
+                ? "w-8 h-2 bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                 : "w-2 h-2 bg-slate-600 hover:bg-slate-400"
             }`}
             aria-label={`Go to card ${i + 1}`}
@@ -303,16 +337,17 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       </div>
 
       {/* Navigation arrows */}
+      {/* Absolute positioned to ensure they are clickable on sides */}
       <button
         onClick={prev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute left-0 md:-left-8 top-1/2 -translate-y-1/2 z-[30] w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800/90 backdrop-blur border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition shadow-lg"
         aria-label="Previous"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute right-0 md:-right-8 top-1/2 -translate-y-1/2 z-[30] w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-800/90 backdrop-blur border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition shadow-lg"
         aria-label="Next"
       >
         ›
@@ -341,27 +376,27 @@ export const CertificationsSection = () => {
       : certifications.filter((c) => c.category === activeFilter);
 
   return (
-    <section id="certifications" className="py-16 px-4 overflow-x-hidden">
+    <section id="certifications" className="py-16 px-4 overflow-x-hidden bg-slate-950">
       <div className="max-w-6xl mx-auto">
 
         {/* HEADER */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-bold mb-3">Certifications</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">Certifications</h2>
           <p className="text-slate-400">
             Verified credentials across cloud, development, and AI
           </p>
         </div>
 
         {/* FILTER */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
+        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`px-4 py-2 rounded-full border transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-sm border transition-all duration-300 ${
                 activeFilter === cat
-                  ? "bg-primary text-white border-primary"
-                  : "bg-slate-800 text-slate-300 border-slate-700"
+                  ? "bg-white text-slate-950 border-white font-bold scale-105 shadow-lg shadow-white/10"
+                  : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600 hover:text-slate-200"
               }`}
             >
               {cat}
@@ -371,7 +406,7 @@ export const CertificationsSection = () => {
 
         {/* CENTER-FOCUSED CAROUSEL (all) or GRID (filtered) */}
         {activeFilter === "all" ? (
-          <div className="px-4">
+          <div className="relative w-full flex justify-center py-4">
             <CenterFocusedCarousel items={certifications} />
           </div>
         ) : (
@@ -385,8 +420,8 @@ export const CertificationsSection = () => {
             {filtered.map((cert) => (
               <motion.div
                 key={cert.id}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="group relative"
+                whileHover={{ y: -5 }}
+                className="group relative w-full"
               >
                 <CertificationCard cert={cert} isActive />
               </motion.div>
