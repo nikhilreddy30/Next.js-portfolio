@@ -108,7 +108,7 @@ const CertificationCard = ({
 }) => {
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-700/50 p-4 backdrop-blur-sm ${
+      className={`relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-700/50 p-4 backdrop-blur-sm h-full ${
         isActive ? "shadow-2xl" : "shadow-lg"
       }`}
     >
@@ -119,7 +119,7 @@ const CertificationCard = ({
         }`}
       />
 
-      <div className="relative z-10 flex flex-col">
+      <div className="relative z-10 flex flex-col h-full">
         {/* TOP: ISSUER ICON */}
         <div className="flex justify-between items-start mb-3">
           <div
@@ -143,8 +143,8 @@ const CertificationCard = ({
           {cert.title}
         </h3>
 
-        {/* DESCRIPTION */}
-        <p className="text-xs text-slate-400 mb-3 line-clamp-2 leading-relaxed">
+        {/* DESCRIPTION - flex-1 pushes button to bottom */}
+        <p className="text-xs text-slate-400 mb-3 line-clamp-2 leading-relaxed flex-1">
           {cert.description}
         </p>
 
@@ -410,13 +410,13 @@ export const CertificationsSection = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr"
           >
             {filtered.map((cert) => (
               <motion.div
                 key={cert.id}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className="group relative"
+                className="group relative h-full"
               >
                 <CertificationCard cert={cert} isActive />
               </motion.div>
