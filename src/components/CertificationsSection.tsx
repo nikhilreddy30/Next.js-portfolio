@@ -238,10 +238,10 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   // --- Layout math ---
   const centerScale = 1.18;
   const sideScale = 0.85;
-  const cardBaseHeight = cardWidth * 1.3;
+  const cardBaseHeight = cardWidth * 1.0;
 
   // Container must fit the scaled center card + breathing room
-  const containerHeight = cardBaseHeight * centerScale + 40;
+  const containerHeight = cardBaseHeight * centerScale + 20;
 
   // Side offset: positions side card centers so ~30% of their width peeks out
   // behind the center card (Cover Flow style)
