@@ -250,6 +250,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
           style={{
             height: `${cardWidth * 1.4}px`,
             width: "100%",
+            maxWidth: "1200px",
           }}
         >
           {visibleCards.map(({ item, position, isActive }, idx) => (
@@ -260,12 +261,16 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
               style={{
                 width: isActive ? `${cardWidth * 1.25}px` : `${cardWidth * 0.8}px`,
                 height: "100%",
-                // Adjust positioning to ensure side cards are visible
+                // Position cards with proper spacing for partial visibility
                 left: `calc(50% + ${position * (cardWidth * 0.7 + 40)}px - ${isActive ? cardWidth * 0.625 : cardWidth * 0.4}px)`,
+                // Add clip-path for partial visibility
+                clipPath: isActive ? 
+                  "none" : 
+                  `inset(0 ${position === -1 ? '0' : 'auto'} 0 ${position === 1 ? '0' : 'auto'})`,
               }}
               animate={{
                 scale: isActive ? 1.25 : 0.8,
-                opacity: isActive ? 1 : 0.85,
+                opacity: isActive ? 1 : 0.7,
                 zIndex: isActive ? 10 : 1,
               }}
               transition={{
@@ -366,7 +371,9 @@ export const CertificationsSection = () => {
 
         {/* CENTER-FOCUSED CAROUSEL (all) or GRID (filtered) */}
         {activeFilter === "all" ? (
-          <CenterFocusedCarousel items={certifications} />
+          <div className="px-4">
+            <CenterFocusedCarousel items={certifications} />
+          </div>
         ) : (
           <motion.div
             key={activeFilter}
