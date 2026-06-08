@@ -273,36 +273,36 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
     // Only render cards within visible range
     const visible = absOffset <= 3;
 
-    // Scale: center=1.18, ±1=0.88, ±2=0.72, beyond=0.6
+    // Dramatic scaling: center=1.25, ±1=0.75, ±2=0.55, ±3=0.4
     const scaleMap: Record<number, number> = {
-      0: 1.18,
-      1: 0.87,
-      2: 0.70,
-      3: 0.58,
+      0: 1.25,
+      1: 0.75,
+      2: 0.55,
+      3: 0.4,
     };
-    const scale = scaleMap[Math.min(absOffset, 3)] ?? 0.55;
+    const scale = scaleMap[Math.min(absOffset, 3)] ?? 0.35;
 
-    // Opacity
+    // Opacity - more dramatic fade
     const opacityMap: Record<number, number> = {
       0: 1,
-      1: 0.72,
-      2: 0.45,
+      1: 0.7,
+      2: 0.4,
       3: 0.2,
     };
     const opacity = opacityMap[Math.min(absOffset, 3)] ?? 0;
 
-    // Horizontal translation — cards spread out from center
-    const spreadFactor = cardWidth * 0.62 + gap;
+    // Horizontal translation - increased spread
+    const spreadFactor = cardWidth * 0.8 + gap;
     const translateX = offset * spreadFactor;
 
-    // 3D rotation for side cards
-    const rotateY = offset === 0 ? 0 : offset > 0 ? -28 : 28;
+    // 3D rotation - more pronounced for side cards
+    const rotateY = offset === 0 ? 0 : offset > 0 ? -35 : 35;
 
-    // Blur
-    const blur = absOffset === 0 ? 0 : absOffset === 1 ? 1 : absOffset === 2 ? 3 : 5;
+    // Blur - increased blur for depth
+    const blur = absOffset === 0 ? 0 : absOffset === 1 ? 2 : absOffset === 2 ? 4 : 6;
 
-    // Z-index
-    const zIndex = 100 - absOffset * 10;
+    // Z-index - ensure center is always on top
+    const zIndex = 100 - absOffset * 15;
 
     return { scale, opacity, translateX, rotateY, blur, zIndex, visible };
   };
@@ -323,7 +323,7 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
       <div
         className="relative mx-auto overflow-visible"
         style={{
-          height: `${cardWidth * 1.42}px`,
+          height: `${cardWidth * 1.45}px`, // Increased height for larger center card
           width: "100%",
           maxWidth: "100%",
         }}
@@ -348,9 +348,9 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
               }}
               transition={{
                 type: "spring",
-                stiffness: 280,
-                damping: 32,
-                mass: 0.8,
+                stiffness: 300, // Increased stiffness for quicker movement
+                damping: 25, // Reduced damping for less bounce
+                mass: 0.7,
               }}
               style={{
                 position: "absolute",
@@ -361,8 +361,8 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
                 cursor: isCenter ? "default" : "pointer",
                 transformStyle: "preserve-3d",
                 boxShadow: isCenter
-                  ? `0 0 48px 8px ${cert.glow}, 0 24px 60px rgba(0,0,0,0.55)`
-                  : "0 8px 32px rgba(0,0,0,0.3)",
+                  ? `0 0 60px 12px ${cert.glow}, 0 30px 70px rgba(0,0,0,0.6)`
+                  : "0 10px 40px rgba(0,0,0,0.4)",
                 borderRadius: "24px",
               }}
             >
@@ -382,8 +382,8 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
               onClick={() => goTo(count + i)}
               className={`rounded-full transition-all duration-300 ${
                 isActive
-                  ? "w-6 h-2 bg-white"
-                  : "w-2 h-2 bg-slate-600 hover:bg-slate-400"
+                  ? "w-8 h-3 bg-white" // Larger active dot
+                  : "w-3 h-3 bg-slate-600 hover:bg-slate-400"
               }`}
               aria-label={`Go to card ${i + 1}`}
             />
@@ -394,14 +394,14 @@ const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
       {/* Nav arrows */}
       <button
         onClick={prev}
-        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[200] w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Previous"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[200] w-10 h-10 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[200] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Next"
       >
         ›
