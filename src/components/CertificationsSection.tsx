@@ -107,43 +107,43 @@ const CertificationCard = ({
   isActive?: boolean;
 }) => {
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-6 h-full hover:shadow-xl transition-all w-full ${isActive ? 'shadow-xl' : ''}`}>
+    <div className={`relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-5 h-full flex flex-col ${isActive ? 'shadow-xl' : ''}`}>
       {/* Gradient */}
       <div
         className={`absolute inset-0 bg-gradient-to-br ${cert.bg} ${isActive ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
       />
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col h-full">
         {/* TOP: ISSUER ICON */}
-        <div className="flex justify-between items-start mb-5">
+        <div className="flex justify-between items-start mb-4">
           <div
-            className={`w-14 h-14 rounded-xl ${cert.iconBg} flex items-center justify-center`}
+            className={`w-12 h-12 rounded-xl ${cert.iconBg} flex items-center justify-center`}
           >
             <img
               src={cert.issuerLogo}
               alt={cert.issuer}
-              className="w-8 h-8 object-contain"
+              className="w-7 h-7 object-contain"
             />
           </div>
           <span
-            className={`px-3 py-1 rounded-full text-xs border ${cert.color}`}
+            className={`px-2.5 py-0.5 rounded-full text-xs border ${cert.color}`}
           >
             {cert.category}
           </span>
         </div>
 
         {/* TITLE */}
-        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2">
+        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 flex-shrink-0">
           {cert.title}
         </h3>
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-slate-400 mb-4 line-clamp-3 min-h-[60px]">
+        <p className="text-sm text-slate-400 mb-4 line-clamp-3 flex-grow min-h-[60px] overflow-hidden">
           {cert.description}
         </p>
 
         {/* ISSUER + YEAR */}
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-4 flex-shrink-0">
           <span className="text-sm text-slate-300 font-medium">
             {cert.issuer}
           </span>
@@ -157,7 +157,7 @@ const CertificationCard = ({
           href={cert.certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-semibold transition ${cert.button}`}
+          className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white font-semibold transition ${cert.button} mt-auto`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={(e) => e.stopPropagation()}
@@ -180,7 +180,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   // Card dimensions (responsive)
   const getCardWidth = () => {
     if (typeof window === "undefined") return 320;
-    if (window.innerWidth < 640) return Math.min(window.innerWidth - 100, 280);
+    if (window.innerWidth < 640) return Math.min(window.innerWidth - 40, 280);
     if (window.innerWidth < 1024) return 320;
     return 360;
   };
@@ -248,7 +248,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
         <div
           className="flex items-center justify-center"
           style={{
-            height: `${cardWidth * 1.05}px`,
+            height: `${cardWidth * 1.4}px`,
             width: "100%",
           }}
         >
@@ -260,9 +260,10 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
               style={{
                 width: isActive ? `${cardWidth * 1.25}px` : `${cardWidth * 0.8}px`,
                 height: "100%",
+                // Adjust positioning to ensure side cards are visible
+                left: `calc(50% + ${position * (cardWidth * 0.7 + 40)}px - ${isActive ? cardWidth * 0.625 : cardWidth * 0.4}px)`,
               }}
               animate={{
-                x: position * (cardWidth * 0.7 + 40), // Position with spacing
                 scale: isActive ? 1.25 : 0.8,
                 opacity: isActive ? 1 : 0.85,
                 zIndex: isActive ? 10 : 1,
