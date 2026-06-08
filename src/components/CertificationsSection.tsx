@@ -248,7 +248,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
         <div
           className="flex items-center justify-center"
           style={{
-            height: `${cardWidth * 1.4}px`,
+            height: `${cardWidth * 1.05}px`,
             width: "100%",
           }}
         >
