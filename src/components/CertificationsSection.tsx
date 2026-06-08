@@ -177,7 +177,6 @@ const CertificationCard = ({
 };
 
 /* ================= CENTER-FOCUSED CAROUSEL ================= */
-/* ================= CENTER-FOCUSED CAROUSEL ================= */
 const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
@@ -237,7 +236,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
 
   // --- Layout math ---
   const centerScale = 1.18;
-  const sideScale = 0.85;
+  const sideScale = 0.75; // Reduced from 0.85
 
   // Fixed card height matching content
   const cardHeight = 260;
@@ -245,8 +244,8 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   // Container height fits the scaled center card + breathing room
   const containerHeight = cardHeight * centerScale + 40;
 
-  // Side offset: 0.7 pushes side cards further out for better visibility (~30-35% visible)
-  const sideOffset = cardWidth * 0.7;
+  // Side offset: 0.65 for balanced spacing
+  const sideOffset = cardWidth * 0.65;
 
   return (
     <div
@@ -254,7 +253,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
     >
-      {/* Carousel container — overflow-visible so side cards are NEVER clipped */}
+      {/* Carousel container */}
       <div className="relative mx-auto overflow-visible">
         <div
           className="flex items-center justify-center"
@@ -290,9 +289,11 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                 animate={{
                   x: translateX,
                   scale: isActive ? centerScale : sideScale,
-                  opacity: isActive ? 1 : 0.85,
+                  // Reduced opacity for side cards
+                  opacity: isActive ? 1 : 0.5,
                   zIndex: isActive ? 10 : 1,
-                  filter: isActive ? "brightness(1)" : "brightness(0.9)",
+                  // Reduced brightness for side cards
+                  filter: isActive ? "brightness(1)" : "brightness(0.6)",
                 }}
                 transition={{
                   type: "spring",
@@ -301,9 +302,9 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                   mass: 0.8,
                 }}
                 whileHover={{
-                  scale: isActive ? centerScale : sideScale * 1.08,
-                  opacity: 0.95,
-                  filter: "brightness(1)",
+                  scale: isActive ? centerScale : sideScale * 1.05,
+                  opacity: isActive ? 1 : 0.65,
+                  filter: isActive ? "brightness(1)" : "brightness(0.75)",
                   transition: { duration: 0.2 },
                 }}
               >
