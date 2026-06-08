@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { ExternalLink } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
 /* ================= CATEGORY CONFIG ================= */
@@ -98,10 +98,9 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
   return (
     <motion.div
       whileHover={{ y: -10, scale: 1.02 }}
-      className="group relative h-full"
+      className="group relative"
     >
       <div className="relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-6 h-full hover:shadow-xl transition-all">
-
         {/* Gradient */}
         <motion.div
           className={`absolute inset-0 bg-gradient-to-br ${cert.bg}`}
@@ -109,8 +108,7 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
           whileHover={{ opacity: 1 }}
         />
 
-        <div className="relative z-10 flex flex-col h-full">
-
+        <div className="relative z-10">
           {/* TOP: ISSUER ICON */}
           <div className="flex justify-between items-start mb-5">
             <div className={`w-14 h-14 rounded-xl ${cert.iconBg} flex items-center justify-center`}>
@@ -136,8 +134,8 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
             {cert.description}
           </p>
 
-          {/* ISSUER TEXT ONLY */}
-          <div className="flex items-center justify-between mb-5 mt-auto">
+          {/* ISSUER TEXT ONLY (NO DUPLICATE LOGO) */}
+          <div className="flex items-center justify-between mb-5">
             <span className="text-sm text-slate-300 font-medium">
               {cert.issuer}
             </span>
@@ -165,145 +163,12 @@ const CertificationCard = ({ cert }: { cert: CertificationUI }) => {
   );
 };
 
-/* ================= SLIDER ================= */
-const CertificationSlider = ({ certs, isAll }: { certs: CertificationUI[]; isAll: boolean }) => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  // Cards per page based on screen size
-  const cardsPerPage = 3;
-  const totalPages = Math.ceil(certs.length / cardsPerPage);
-
-  const currentCerts = certs.slice(
-    currentPage * cardsPerPage,
-    currentPage * cardsPerPage + cardsPerPage
-  );
-
-  const goToPage = (page: number) => {
-    setDirection(page > currentPage ? 1 : -1);
-    setCurrentPage(page);
-  };
-
-  const nextPage = () => {
-    setDirection(1);
-    setCurrentPage((prev) => (prev + 1) % totalPages);
-  };
-
-  const prevPage = () => {
-    setDirection(-1);
-    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
-  };
-
-  // Auto-slide effect (only when "all" category is active)
-  useEffect(() => {
-    if (!isAll || totalPages <= 1) return;
-
-    const interval = setInterval(() => {
-      nextPage();
-    }, 4000); // Auto-slide every 4 seconds
-
-    return () => clearInterval(interval);
-  }, [isAll, totalPages, currentPage]);
-
-  // Reset to first page when filter changes
-  useEffect(() => {
-    setCurrentPage(0);
-    setDirection(0);
-  }, [certs.length]);
-
-  // Slide animation variants
-  const variants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? 300 : -300,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (dir: number) => ({
-      x: dir < 0 ? 300 : -300,
-      opacity: 0,
-    }),
-  };
-
-  if (certs.length === 0) {
-    return (
-      <div className="text-center py-12 text-slate-400">
-        No certifications found in this category.
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative">
-      {/* SLIDER VIEWPORT */}
-      <div className="overflow-hidden rounded-2xl">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={currentPage}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.3 },
-            }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {currentCerts.map((cert) => (
-              <CertificationCard key={cert.id} cert={cert} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* NAVIGATION BUTTONS */}
-      {totalPages > 1 && (
-        <>
-          <button
-            onClick={prevPage}
-            className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg hover:scale-110"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={nextPage}
-            className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700 text-white flex items-center justify-center hover:bg-primary hover:border-primary transition-all shadow-lg hover:scale-110"
-            aria-label="Next"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </>
-      )}
-
-      {/* DOTS INDICATOR */}
-      {totalPages > 1 && (
-        <div className="flex justify-center gap-2 mt-8">
-          {Array.from({ length: totalPages }).map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => goToPage(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                idx === currentPage
-                  ? "w-8 bg-gradient-to-r from-cyan-400 to-blue-500"
-                  : "w-2 bg-slate-600 hover:bg-slate-500"
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
 /* ================= MAIN ================= */
 export const CertificationsSection = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const isDraggingRef = useRef(false);
 
   const categories: (CategoryKey | "all")[] = [
     "all",
@@ -320,31 +185,87 @@ export const CertificationsSection = () => {
       ? certifications
       : certifications.filter((c) => c.category === activeFilter);
 
+  // Carousel Configuration
+  const step = 320; // Width + gap for each card
+  const extended = [...certifications, ...certifications, ...certifications];
+  const singleSetWidth = certifications.length * step;
+  const centerIdx = Math.floor(extended.length / 2);
+  
+  // Start positioned at the middle set
+  const x = useMotionValue(-centerIdx * step);
+
+  // Autoplay Logic
+  useEffect(() => {
+    if (isDragging || isHovered || activeFilter !== "all") return;
+    
+    let animationFrameId: number;
+    let lastTime = performance.now();
+
+    const animateScroll = (time: number) => {
+      const delta = Math.min(time - lastTime, 50); // Cap delta to prevent huge jumps
+      lastTime = time;
+      const speed = 0.05; // pixels per ms (~3px per frame, smooth premium feel)
+
+      let newX = x.get() - speed * delta; // Move right to left
+
+      // Seamless infinite wrap logic
+      const limit = singleSetWidth;
+      if (newX < -limit * 1.5 - 10) {
+        newX += limit;
+      } else if (newX > -limit * 0.5 + 10) {
+        newX -= limit;
+      }
+
+      x.set(newX);
+      animationFrameId = requestAnimationFrame(animateScroll);
+    };
+
+    animationFrameId = requestAnimationFrame(animateScroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isDragging, isHovered, activeFilter, singleSetWidth, x]);
+
+  const handleDragEnd = () => {
+    isDraggingRef.current = false;
+    setIsDragging(false);
+    
+    const currentX = x.get();
+    const limit = singleSetWidth;
+    
+    // Wrap before snapping to ensure we snap to the middle set
+    let snappedX = currentX;
+    if (snappedX < -limit * 1.5) snappedX += limit;
+    if (snappedX > -limit * 0.5) snappedX -= limit;
+
+    // Snap to nearest card
+    const nearest = Math.round(snappedX / step) * step;
+    animate(x, nearest, { type: "spring", stiffness: 300, damping: 30 });
+  };
+
+  const handleCardClick = (i: number) => {
+    if (isDraggingRef.current) return;
+    
+    const limit = singleSetWidth;
+    // Find the equivalent index in the middle set to avoid wrap jumps during animation
+    const middleSetIndex = (i % certifications.length) + certifications.length;
+    let targetX = -middleSetIndex * step;
+
+    // Ensure targetX is within the safe wrap zone
+    if (targetX < -limit * 1.5) targetX += limit;
+    if (targetX > -limit * 0.5) targetX -= limit;
+
+    animate(x, targetX, { type: "spring", stiffness: 300, damping: 30 });
+  };
+
   return (
     <section id="certifications" className="py-16 px-4">
       <div className="max-w-6xl mx-auto">
-
         {/* HEADER */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center px-3 py-1.5 rounded-full glass-subtle border border-primary/30 text-xs font-mono text-primary mb-6 glow-primary">
-            ──── ACHIEVEMENTS
-          </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            My{" "}
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Certifications
-            </span>
-          </h2>
-          <div className="w-24 h-1.5 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto rounded-full" />
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold mb-3">Certifications</h2>
           <p className="text-slate-400">
             Verified credentials across cloud, development, and AI
           </p>
-        </motion.div>
+        </div>
 
         {/* FILTER */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
@@ -352,10 +273,10 @@ export const CertificationsSection = () => {
             <button
               key={cat}
               onClick={() => setActiveFilter(cat)}
-              className={`px-4 py-2 rounded-full border ${
+              className={`px-4 py-2 rounded-full border transition-colors ${
                 activeFilter === cat
-                  ? "bg-primary text-white"
-                  : "bg-slate-800 text-slate-300"
+                  ? "bg-primary text-white border-primary"
+                  : "bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700"
               }`}
             >
               {cat}
@@ -363,17 +284,105 @@ export const CertificationsSection = () => {
           ))}
         </div>
 
-        {/* SLIDER */}
-        <motion.div
-          key={activeFilter}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
-          className="px-8"
-        >
-          <CertificationSlider certs={filtered} isAll={activeFilter === "all"} />
-        </motion.div>
+        {/* CONTENT: CAROUSEL OR GRID */}
+        {activeFilter === "all" ? (
+          <div 
+            className="relative w-full overflow-hidden py-10"
+            style={{ perspective: "1000px", minHeight: "480px" }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <motion.div
+              className="flex items-center justify-center cursor-grab active:cursor-grabbing"
+              drag="x"
+              dragElastic={0.1}
+              onDragStart={() => {
+                isDraggingRef.current = true;
+                setIsDragging(true);
+              }}
+              onDragEnd={handleDragEnd}
+              style={{ x }}
+            >
+              {extended.map((cert, i) => {
+                // Calculate transforms based on distance from center
+                const centerX = -i * step;
+                
+                const scale = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  [0.75, 0.85, 1.2, 0.85, 0.75]
+                );
+                
+                const opacity = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  [0.3, 0.6, 1, 0.6, 0.3]
+                );
+                
+                const rotateY = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  [15, 10, 0, -10, -15]
+                );
+                
+                const zIndex = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  [10, 20, 30, 20, 10]
+                );
+                
+                const blur = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  ["blur(4px)", "blur(2px)", "blur(0px)", "blur(2px)", "blur(4px)"]
+                );
 
+                const boxShadow = useTransform(
+                  x,
+                  [centerX - step * 2, centerX - step, centerX, centerX + step, centerX + step * 2],
+                  [
+                    "0 0 0px rgba(0,0,0,0)",
+                    "0 10px 20px rgba(0,0,0,0.2)",
+                    "0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.1)",
+                    "0 10px 20px rgba(0,0,0,0.2)",
+                    "0 0 0px rgba(0,0,0,0)",
+                  ]
+                );
+
+                return (
+                  <motion.div
+                    key={`${cert.id}-${i}`}
+                    className="flex-shrink-0 w-[280px] md:w-[320px] mx-2"
+                    style={{
+                      scale,
+                      opacity,
+                      rotateY,
+                      zIndex,
+                      filter: blur,
+                      boxShadow,
+                      transformStyle: "preserve-3d",
+                      willChange: "transform, opacity, filter",
+                    }}
+                    onTap={() => handleCardClick(i)}
+                  >
+                    <CertificationCard cert={cert} />
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+            
+            {/* Gradient Fades on Edges */}
+            <div className="absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-slate-950 to-transparent pointer-events-none z-20" />
+            <div className="absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-slate-950 to-transparent pointer-events-none z-20" />
+          </div>
+        ) : (
+          /* GRID FALLBACK */
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((cert) => (
+              <CertificationCard key={cert.id} cert={cert} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
