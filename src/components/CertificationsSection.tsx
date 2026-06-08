@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useMotionValue, useSpring, animate } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { certifications as portfolioCertifications } from "@/data/portfolio";
 
@@ -39,7 +39,7 @@ const CATEGORY_CONFIG = {
     color: "border-indigo-500 text-indigo-400",
     bg: "from-indigo-500/20 to-indigo-500/5",
     iconBg: "bg-indigo-500/20 border-indigo-500/30",
-    button: "bg-indigo-500 hover:bg-indigo-600",
+    button: "bg-indigo-500 hover:bg-cyan-600",
     glow: "rgba(99,102,241,0.35)",
   },
   Professional: {
@@ -101,16 +101,16 @@ const certifications: CertificationUI[] = portfolioCertifications.map(
 /* ================= CARD ================= */
 const CertificationCard = ({
   cert,
-  isCenter = false,
+  isActive = false,
 }: {
   cert: CertificationUI;
-  isCenter?: boolean;
+  isActive?: boolean;
 }) => {
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-6 h-full hover:shadow-xl transition-all w-full">
+    <div className={`relative overflow-hidden rounded-3xl bg-slate-900/60 border border-slate-700/50 p-6 h-full hover:shadow-xl transition-all w-full ${isActive ? 'shadow-xl' : ''}`}>
       {/* Gradient */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${cert.bg} ${isCenter ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
+        className={`absolute inset-0 bg-gradient-to-br ${cert.bg} ${isActive ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
       />
 
       <div className="relative z-10">
@@ -170,239 +170,143 @@ const CertificationCard = ({
   );
 };
 
-/* ================= COVER FLOW CAROUSEL ================= */
-
-// Duplicate items for seamless infinite loop
-function buildLoopItems(items: CertificationUI[]) {
-  return [...items, ...items, ...items];
-}
-
-const CoverFlowCarousel = ({ items }: { items: CertificationUI[] }) => {
-  const looped = buildLoopItems(items);
-  const count = items.length;
-  const totalCount = looped.length;
-
-  // Start at the middle copy
-  const [activeIndex, setActiveIndex] = useState(count);
+/* ================= CENTER-FOCUSED CAROUSEL ================= */
+const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const isHovering = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Drag state
-  const dragStartX = useRef(0);
-  const isDragging = useRef(false);
-
   // Card dimensions (responsive)
   const getCardWidth = () => {
     if (typeof window === "undefined") return 320;
-    if (window.innerWidth < 640) return Math.min(window.innerWidth - 48, 280);
+    if (window.innerWidth < 640) return Math.min(window.innerWidth - 100, 280);
     if (window.innerWidth < 1024) return 320;
-    return 380;
+    return 360;
   };
 
-  const getGap = () => {
-    if (typeof window === "undefined") return 32;
-    if (window.innerWidth < 640) return 20;
-    return 40;
-  };
-
-  const [cardWidth, setCardWidth] = useState(380);
-  const [gap, setGap] = useState(40);
+  const [cardWidth, setCardWidth] = useState(360);
 
   useEffect(() => {
     const update = () => {
       setCardWidth(getCardWidth());
-      setGap(getGap());
     };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Snap to index with infinite loop correction
-  const goTo = useCallback(
-    (idx: number) => {
-      let target = idx;
-      // Keep within the middle copy range to allow infinite feel
-      if (target < count / 2) target += count;
-      if (target >= totalCount - count / 2) target -= count;
-      setActiveIndex(target);
-    },
-    [count, totalCount]
-  );
+  // Navigation
+  const next = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % items.length);
+  }, [items.length]);
 
-  const next = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
-  const prev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
+  const prev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  }, [items.length]);
+
+  const goToIndex = useCallback((index: number) => {
+    setCurrentIndex(index);
+  }, []);
 
   // Autoplay
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
       if (!isHovering.current) next();
-    }, 3000); // Slower for dramatic effect
+    }, 3500);
     return () => {
       if (autoplayRef.current) clearInterval(autoplayRef.current);
     };
   }, [next]);
 
-  // Drag handlers
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
-    isDragging.current = true;
-    dragStartX.current =
-      "touches" in e ? e.touches[0].clientX : e.clientX;
-  };
-
-  const handleDragEnd = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    const endX =
-      "changedTouches" in e
-        ? e.changedTouches[0].clientX
-        : e.clientX;
-    const delta = dragStartX.current - endX;
-    if (Math.abs(delta) > 40) {
-      delta > 0 ? next() : prev();
+  // Get visible cards
+  const getVisibleCards = () => {
+    const visible = [];
+    for (let i = -1; i <= 1; i++) {
+      const index = (currentIndex + i + items.length) % items.length;
+      visible.push({
+        item: items[index],
+        index,
+        position: i,
+        isActive: i === 0,
+      });
     }
+    return visible;
   };
 
-  // Compute per-card transform
-  const getCardStyle = (idx: number) => {
-    const offset = idx - activeIndex;
-    const absOffset = Math.abs(offset);
-
-    // Only render cards within visible range
-    const visible = absOffset <= 4;
-
-    // Dramatic scaling: center=1.6, ±1=0.8, ±2=0.6, ±3=0.4, ±4=0.3
-    const scaleMap: Record<number, number> = {
-      0: 1.6,
-      1: 0.8,
-      2: 0.6,
-      3: 0.4,
-      4: 0.3,
-    };
-    const scale = scaleMap[Math.min(absOffset, 4)] ?? 0.25;
-
-    // Opacity - dramatic fade
-    const opacityMap: Record<number, number> = {
-      0: 1,
-      1: 0.85,
-      2: 0.65,
-      3: 0.4,
-      4: 0.2,
-    };
-    const opacity = opacityMap[Math.min(absOffset, 4)] ?? 0;
-
-    // Horizontal translation - increased spread
-    const spreadFactor = cardWidth * 1.2 + gap;
-    const translateX = offset * spreadFactor;
-
-    // 3D rotation - cinematic
-    const rotateY = offset === 0 ? 0 : offset > 0 ? -45 : 45;
-
-    // Blur - strong depth
-    const blur = absOffset === 0 ? 0 : absOffset === 1 ? 3 : absOffset === 2 ? 6 : absOffset === 3 ? 10 : 14;
-
-    // Z-index - ensure center is always on top
-    const zIndex = 100 - absOffset * 20;
-
-    return { scale, opacity, translateX, rotateY, blur, zIndex, visible };
-  };
+  const visibleCards = getVisibleCards();
 
   return (
     <div
       ref={containerRef}
       className="relative w-full select-none"
-      style={{ perspective: "1500px" }}
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
-      onMouseDown={handleDragStart}
-      onMouseUp={handleDragEnd}
-      onTouchStart={handleDragStart}
-      onTouchEnd={handleDragEnd}
     >
-      {/* Carousel stage */}
-      <div
-        className="relative mx-auto overflow-visible"
-        style={{
-          height: `${cardWidth * 1.65}px`, // Increased for larger center card
-          width: "100%",
-          maxWidth: "100%",
-        }}
-      >
-        {looped.map((cert, idx) => {
-          const s = getCardStyle(idx);
-          if (!s.visible) return null;
-
-          const isCenter = idx === activeIndex;
-
-          return (
+      {/* Carousel container */}
+      <div className="relative mx-auto overflow-hidden">
+        <div
+          className="flex items-center justify-center"
+          style={{
+            height: `${cardWidth * 1.4}px`,
+            width: "100%",
+          }}
+        >
+          {visibleCards.map(({ item, position, isActive }, idx) => (
             <motion.div
-              key={`${cert.id}-${idx}`}
-              onClick={() => !isDragging.current && goTo(idx)}
+              key={`${item.id}-${idx}`}
+              onClick={() => position !== 0 && goToIndex((currentIndex + position + items.length) % items.length)}
+              className="absolute cursor-pointer"
+              style={{
+                width: isActive ? `${cardWidth * 1.25}px` : `${cardWidth * 0.8}px`,
+                height: "100%",
+              }}
               animate={{
-                x: `calc(50% - ${cardWidth / 2}px + ${s.translateX}px)`,
-                scale: s.scale,
-                opacity: s.opacity,
-                rotateY: s.rotateY,
-                filter: s.blur > 0 ? `blur(${s.blur}px)` : "none",
-                zIndex: s.zIndex,
+                x: position * (cardWidth * 0.7 + 40), // Position with spacing
+                scale: isActive ? 1.25 : 0.8,
+                opacity: isActive ? 1 : 0.85,
+                zIndex: isActive ? 10 : 1,
               }}
               transition={{
                 type: "spring",
-                stiffness: 350,
-                damping: 20,
-                mass: 0.6,
-              }}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: cardWidth,
-                height: "100%",
-                cursor: isCenter ? "default" : "pointer",
-                transformStyle: "preserve-3d",
-                boxShadow: isCenter
-                  ? `0 0 80px 20px ${cert.glow}, 0 40px 80px rgba(0,0,0,0.7)`
-                  : "0 8px 32px rgba(0,0,0,0.3)",
-                borderRadius: "24px",
+                stiffness: 300,
+                damping: 25,
+                mass: 0.8,
               }}
             >
-              <CertificationCard cert={cert} isCenter={isCenter} />
+              <CertificationCard cert={item} isActive={isActive} />
             </motion.div>
-          );
-        })}
+          ))}
+        </div>
       </div>
 
-      {/* Navigation dots — based on original items */}
-      <div className="flex justify-center gap-2 mt-8">
-        {items.map((_, i) => {
-          const isActive = ((activeIndex % count) + count) % count === i;
-          return (
-            <button
-              key={i}
-              onClick={() => goTo(count + i)}
-              className={`rounded-full transition-all duration-300 ${
-                isActive
-                  ? "w-10 h-4 bg-white"
-                  : "w-4 h-4 bg-slate-600 hover:bg-slate-400"
-              }`}
-              aria-label={`Go to card ${i + 1}`}
-            />
-          );
-        })}
+      {/* Navigation dots */}
+      <div className="flex justify-center gap-2 mt-6">
+        {items.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goToIndex(i)}
+            className={`rounded-full transition-all duration-300 ${
+              currentIndex === i
+                ? "w-8 h-2 bg-white"
+                : "w-2 h-2 bg-slate-600 hover:bg-slate-400"
+            }`}
+            aria-label={`Go to card ${i + 1}`}
+          />
+        ))}
       </div>
 
-      {/* Nav arrows */}
+      {/* Navigation arrows */}
       <button
         onClick={prev}
-        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[200] w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Previous"
       >
         ‹
       </button>
       <button
         onClick={next}
-        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[200] w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-[20] w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center text-white hover:bg-slate-700 transition"
         aria-label="Next"
       >
         ›
@@ -459,9 +363,9 @@ export const CertificationsSection = () => {
           ))}
         </div>
 
-        {/* COVER FLOW (all) or GRID (filtered) */}
+        {/* CENTER-FOCUSED CAROUSEL (all) or GRID (filtered) */}
         {activeFilter === "all" ? (
-          <CoverFlowCarousel items={certifications} />
+          <CenterFocusedCarousel items={certifications} />
         ) : (
           <motion.div
             key={activeFilter}
@@ -476,7 +380,7 @@ export const CertificationsSection = () => {
                 whileHover={{ y: -10, scale: 1.02 }}
                 className="group relative"
               >
-                <CertificationCard cert={cert} isCenter />
+                <CertificationCard cert={cert} isActive />
               </motion.div>
             ))}
           </motion.div>
