@@ -163,7 +163,7 @@ const CertificationCard = ({
           href={cert.certificateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button} mt-auto`}
+          className={`w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-white text-sm font-semibold transition ${cert.button}`}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={(e) => e.stopPropagation()}
