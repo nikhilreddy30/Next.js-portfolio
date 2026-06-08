@@ -238,15 +238,14 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
   const centerScale = 1.18;
   const sideScale = 0.85;
 
-  // Estimate card height based on content (icon + title + desc + issuer + button + padding)
-  // This is a fixed estimate that matches the actual rendered card height
+  // Fixed card height matching content
   const cardHeight = 260;
 
-  // Container height must fit the scaled center card + breathing room
+  // Container height fits the scaled center card + breathing room
   const containerHeight = cardHeight * centerScale + 40;
 
-  // Side offset: positions side card centers so ~30% of their width peeks out
-  const sideOffset = cardWidth * 0.45;
+  // Side offset: 0.42 makes ~40% of the side card peek out from behind the center card
+  const sideOffset = cardWidth * 0.42;
 
   return (
     <div
@@ -254,7 +253,7 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
       onMouseEnter={() => (isHovering.current = true)}
       onMouseLeave={() => (isHovering.current = false)}
     >
-      {/* Carousel container — overflow-visible so the scaled center card is NEVER clipped */}
+      {/* Carousel container — overflow-visible so side cards are NEVER clipped */}
       <div className="relative mx-auto overflow-visible">
         <div
           className="flex items-center justify-center"
@@ -290,9 +289,11 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                 animate={{
                   x: translateX,
                   scale: isActive ? centerScale : sideScale,
-                  opacity: isActive ? 1 : 0.6,
+                  // Increased opacity for side cards so they are more visible
+                  opacity: isActive ? 1 : 0.8,
                   zIndex: isActive ? 10 : 1,
-                  filter: isActive ? "brightness(1)" : "brightness(0.7)",
+                  // Increased brightness for side cards
+                  filter: isActive ? "brightness(1)" : "brightness(0.85)",
                 }}
                 transition={{
                   type: "spring",
@@ -302,7 +303,8 @@ const CenterFocusedCarousel = ({ items }: { items: CertificationUI[] }) => {
                 }}
                 whileHover={{
                   scale: isActive ? centerScale : sideScale * 1.05,
-                  opacity: 0.85,
+                  opacity: 0.9,
+                  filter: "brightness(0.95)",
                   transition: { duration: 0.2 },
                 }}
               >
@@ -370,7 +372,7 @@ export const CertificationsSection = () => {
       : certifications.filter((c) => c.category === activeFilter);
 
   return (
-    <section id="certifications" className="py-16 px-4 overflow-x-hidden">
+    <section id="certifications" className="py-16 px-4 overflow-visible">
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="text-center mb-10">
